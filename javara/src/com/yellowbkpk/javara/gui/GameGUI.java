@@ -26,9 +26,14 @@ public class GameGUI {
     }
 
     public void start() {
-        // Show all three of the windows
+        // Pack and show all three of the windows
+        threeDFrame.pack();
         threeDFrame.setVisible(true);
+        
+        gameStatus.pack();
         gameStatus.setVisible(true);
+        
+        statusBar.pack();
         statusBar.setVisible(true);
     }
 
