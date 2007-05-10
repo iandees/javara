@@ -1,12 +1,12 @@
 package com.yellowbkpk.javara.gui;
 
-import com.yellowbkpk.javara.gui.status.GameStatusFrame;
+import com.yellowbkpk.javara.gui.status.MissionStatusFrame;
 import com.yellowbkpk.javara.gui.status.StatusBarFrame;
 import com.yellowbkpk.javara.gui.threed.ThreeDFrame;
 
 public class GameGUI {
     private ThreeDFrame threeDFrame;
-    private GameStatusFrame gameStatus;
+    private MissionStatusFrame gameStatus;
     private StatusBarFrame statusBar;
 
     public GameGUI() {
@@ -18,7 +18,7 @@ public class GameGUI {
         threeDFrame = new ThreeDFrame(); 
         
         // Create a window for the game status (this will have to have the menu bar on it)
-        gameStatus = new GameStatusFrame();
+        gameStatus = new MissionStatusFrame();
         
         // Create a status bar (no title bar on this window)
         statusBar = new StatusBarFrame();
