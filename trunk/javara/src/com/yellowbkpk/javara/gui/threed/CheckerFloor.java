@@ -47,7 +47,7 @@ public class CheckerFloor {
 
         addOriginMarker();
         labelAxes();
-    } // end of CheckerFloor()
+    }
 
     private void createCoords(int x, int z, ArrayList coords) {
         // points created in counter-clockwise order
@@ -59,10 +59,10 @@ public class CheckerFloor {
         coords.add(p2);
         coords.add(p3);
         coords.add(p4);
-    } // end of createCoords()
+    }
 
     private void addOriginMarker() { // points created counter-clockwise, a
-                                        // bit above the floor
+        // bit above the floor
         Point3f p1 = new Point3f(-0.25f, 0.01f, 0.25f);
         Point3f p2 = new Point3f(0.25f, 0.01f, 0.25f);
         Point3f p3 = new Point3f(0.25f, 0.01f, -0.25f);
@@ -75,7 +75,7 @@ public class CheckerFloor {
         oCoords.add(p4);
 
         floorBG.addChild(new ColouredTiles(oCoords, medRed));
-    } // end of addOriginMarker();
+    }
 
     private void labelAxes() {
         Vector3d pt = new Vector3d();
@@ -89,7 +89,7 @@ public class CheckerFloor {
             pt.z = i;
             floorBG.addChild(makeText(pt, "" + i)); // along z-axis
         }
-    } // end of labelAxes()
+    }
 
     private TransformGroup makeText(Vector3d vertex, String text) {
         Text2D message = new Text2D(text, white, "SansSerif", 36, Font.BOLD);
@@ -101,11 +101,10 @@ public class CheckerFloor {
         tg.setTransform(t3d);
         tg.addChild(message);
         return tg;
-    } // end of getTG()
+    }
 
     public BranchGroup getBG() {
         return floorBG;
     }
 
-} // end of CheckerFloor class
-
+}

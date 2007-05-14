@@ -64,7 +64,7 @@ public class KeyBehavior extends ViewPlatformBehavior {
 
     public KeyBehavior() {
         keyPress = new WakeupOnAWTEvent(KeyEvent.KEY_PRESSED);
-    } // end of KeyBehavior()
+    }
 
     public void initialize() {
         wakeupOn(keyPress);
@@ -85,52 +85,55 @@ public class KeyBehavior extends ViewPlatformBehavior {
             }
         }
         wakeupOn(keyPress);
-    } // end of processStimulus()
+    }
 
     private void processKeyEvent(KeyEvent eventKey) {
         int keyCode = eventKey.getKeyCode();
         // System.out.println(keyCode);
 
-        if (eventKey.isAltDown()) // key + <alt>
+        if (eventKey.isAltDown()) { // key + <alt>
             altMove(keyCode);
-        else
+        } else {
             standardMove(keyCode);
-    } // end of processKeyEvent()
+        }
+    }
 
     private void standardMove(int keycode) {
-        if (keycode == forwardKey)
+        if (keycode == forwardKey) {
             doMove(FWD);
-        else if (keycode == backKey)
+        } else if (keycode == backKey) {
             doMove(BACK);
-        else if (keycode == leftKey)
+        } else if (keycode == leftKey) {
             rotateY(ROT_AMT);
-        else if (keycode == rightKey)
+        } else if (keycode == rightKey) {
             rotateY(-ROT_AMT);
-    } // end of standardMove()
+        }
+    }
 
     private void altMove(int keycode) {
-        if (keycode == forwardKey)
+        if (keycode == forwardKey) {
             doMove(UP);
-        else if (keycode == backKey)
+        } else if (keycode == backKey) {
             doMove(DOWN);
-        else if (keycode == leftKey)
+        } else if (keycode == leftKey) {
             doMove(LEFT);
-        else if (keycode == rightKey)
+        } else if (keycode == rightKey) {
             doMove(RIGHT);
-    } // end of altMove()
+        }
+    }
 
     private void rotateY(double radians) {
         targetTG.getTransform(t3d); // targetTG is the ViewPlatform's tranform
         toRot.rotY(radians);
         t3d.mul(toRot);
         targetTG.setTransform(t3d);
-    } // end of rotateY()
+    }
 
     private void doMove(Vector3d theMove) {
         targetTG.getTransform(t3d);
         toMove.setTranslation(theMove);
         t3d.mul(toMove);
         targetTG.setTransform(t3d);
-    } // end of doMove()
+    }
 
-} // end of KeyBehavior class
+}

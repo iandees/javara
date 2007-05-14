@@ -14,11 +14,9 @@ import javax.media.j3d.TransformGroup;
 import javax.swing.JPanel;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
-import javax.vecmath.Point3f;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
-import com.sun.j3d.utils.universe.PlatformGeometry;
 import com.sun.j3d.utils.universe.SimpleUniverse;
 import com.sun.j3d.utils.universe.ViewingPlatform;
 
@@ -43,7 +41,7 @@ public class Wrap3DFrame extends JPanel {
 
         canvas3D.setFocusable(true);
         canvas3D.requestFocus(); // the canvas now has focus, so receives key
-                                    // events
+        // events
 
         su = new SimpleUniverse(canvas3D);
 
@@ -60,16 +58,16 @@ public class Wrap3DFrame extends JPanel {
         sceneBG.addChild(new CheckerFloor().getBG()); // add the floor
 
         // add the target
-        //PropManager propMan = new PropManager(TARGET, true);
-        //sceneBG.addChild(propMan.getTG());
-        //Vector3d targetVec = propMan.getLoc();
-        //System.out.println("Location of target: " + targetVec);
+        // PropManager propMan = new PropManager(TARGET, true);
+        // sceneBG.addChild(propMan.getTG());
+        // Vector3d targetVec = propMan.getLoc();
+        // System.out.println("Location of target: " + targetVec);
 
         Vector3d targetVec = new Vector3d(0f, 0f, 0f);
         initUserControls(targetVec);
 
         sceneBG.compile(); // fix the scene
-    } // end of createSceneGraph()
+    }
 
     private void lightScene() {
         Color3f white = new Color3f(1.0f, 1.0f, 1.0f);
@@ -92,17 +90,16 @@ public class Wrap3DFrame extends JPanel {
         DirectionalLight light2 = new DirectionalLight(white, light2Direction);
         light2.setInfluencingBounds(bounds);
         sceneBG.addChild(light2);
-    } // end of lightScene()
+    }
 
     private void addBackground() {
         Background back = new Background();
         back.setApplicationBounds(bounds);
         back.setColor(0.17f, 0.65f, 0.92f); // sky colour
         sceneBG.addChild(back);
-    } // end of addBackground()
+    }
 
     private void initUserControls(Vector3d targetVec) {
-        // add a 'gun in hand' image to the viewpoint
         ViewingPlatform vp = su.getViewingPlatform();
 
         // position viewpoint
@@ -114,9 +111,8 @@ public class Wrap3DFrame extends JPanel {
 
         // set up keyboard controls
         KeyBehavior keyBeh = new KeyBehavior();
-        // keyBeh can ask the ammoManager to fire a beam
         keyBeh.setSchedulingBounds(bounds);
         vp.setViewPlatformBehavior(keyBeh);
-    } // end of initUserControls()
+    }
 
 }
