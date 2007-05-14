@@ -32,7 +32,7 @@ public class ColouredTiles extends Shape3D {
         plane.setColors(0, cols);
 
         setGeometry(plane);
-    } // end of createGeometry()
+    }
 
     private void createAppearance() {
         Appearance app = new Appearance();
@@ -43,6 +43,6 @@ public class ColouredTiles extends Shape3D {
         app.setPolygonAttributes(pa);
 
         setAppearance(app);
-    } // end of createAppearance()
+    }
 
-} // end of ColouredTiles class
+}
