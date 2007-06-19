@@ -3,6 +3,8 @@ package com.yellowbkpk.jnova.client.gui;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -31,14 +33,20 @@ public class JNovaGUI implements Observer {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Container contentPane = new JPanel(new BorderLayout());
         
-        animatedPanel = new AnimatedPanel(WINDOW_SIZE);
+        contentPane.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                controller.mouseClick(e.getPoint());
+            }
+        });
+        
+        animatedPanel = new AnimatedPanel(controller, WINDOW_SIZE);
         contentPane.add(animatedPanel, BorderLayout.CENTER);
         
         frame.setContentPane(contentPane);
     }
 
     public void update(Observable o, Object arg) {
-        
+        controller.update();
     }
 
     public void start() {
