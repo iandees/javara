@@ -13,10 +13,9 @@ public class JNovaController extends Observable {
         drawables = new ArrayList<Drawable>();
     }
     
-    public void mouseClick(Point point) {
+    public void addItem(Point point) {
         Vector2D loc = new Vector2D(point.x, point.y);
-        System.out.println(loc);
-        drawables.add(new AbstractDrawable(loc));
+        drawables.add(new AbstractDrawable(loc, new Vector2D(3, 3), new Vector2D(2, 2)));
     }
 
     public void update() {
