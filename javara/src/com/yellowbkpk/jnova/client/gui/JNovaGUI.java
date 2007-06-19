@@ -3,6 +3,8 @@ package com.yellowbkpk.jnova.client.gui;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Observable;
@@ -35,7 +37,12 @@ public class JNovaGUI implements Observer {
         
         contentPane.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                controller.mouseClick(e.getPoint());
+                controller.addItem(e.getPoint());
+            }
+        });
+        
+        contentPane.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
             }
         });
         

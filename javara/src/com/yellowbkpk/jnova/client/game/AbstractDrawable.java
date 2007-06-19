@@ -6,7 +6,7 @@ import java.awt.Graphics;
 
 public class AbstractDrawable implements Drawable {
 
-    private static final float DAMP = 0.5f;
+    private static final float DAMP = 0.9f;
     private Vector2D center;
     private Vector2D speed;
     private Vector2D acceleration;
@@ -23,7 +23,7 @@ public class AbstractDrawable implements Drawable {
 
     public void step() {
         center = center.add(speed.x, speed.y);
-        speed = speed.add(acceleration.x, acceleration.y);
+        speed = speed.multiply(acceleration.x, acceleration.y);
         acceleration = acceleration.multiply(DAMP,  DAMP);
     }
 
