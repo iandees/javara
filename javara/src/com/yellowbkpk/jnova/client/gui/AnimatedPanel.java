@@ -5,8 +5,12 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 import javax.swing.JPanel;
+
+import com.yellowbkpk.jnova.client.game.Drawable;
+import com.yellowbkpk.jnova.client.game.JNovaController;
 
 public class AnimatedPanel extends JPanel implements Runnable {
 
@@ -20,7 +24,10 @@ public class AnimatedPanel extends JPanel implements Runnable {
 
     private Graphics dbg;
 
-    public AnimatedPanel(Dimension dimension) {
+    private JNovaController controller;
+
+    public AnimatedPanel(JNovaController c, Dimension dimension) {
+        controller = c;
         size = dimension;
         setPreferredSize(size);
     }
@@ -56,15 +63,32 @@ public class AnimatedPanel extends JPanel implements Runnable {
         }
     }
 
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if(dbImage != null) {
+            g.drawImage(dbImage, 0, 0, null);
+        }
+    }
+
     private void gameRender() {
         if (dbImage == null) {
             dbImage = createImage(size);
-        } else {
-            dbg = dbImage.getGraphics();
         }
+        
+        dbg = dbImage.getGraphics();
 
         dbg.setColor(Color.white);
         dbg.fillRect(0, 0, size.width, size.height);
+        
+        drawField(dbg);
+    }
+
+    private void drawField(Graphics dbg) {
+        List<Drawable> drawables = controller.getDrawables();
+        
+        for (Drawable drawable : drawables) {
+            drawable.paint(dbg);
+        }
     }
 
     private Image createImage(Dimension size) {
@@ -72,7 +96,7 @@ public class AnimatedPanel extends JPanel implements Runnable {
     }
 
     private void gameUpdate() {
-
+        controller.update();
     }
 
 }
