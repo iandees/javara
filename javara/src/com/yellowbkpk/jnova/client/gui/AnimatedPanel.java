@@ -57,7 +57,7 @@ public class AnimatedPanel extends JPanel implements Runnable {
             repaint();
 
             try {
-                Thread.sleep(20);
+                Thread.sleep(200);
             } catch (InterruptedException e) {
             }
         }
