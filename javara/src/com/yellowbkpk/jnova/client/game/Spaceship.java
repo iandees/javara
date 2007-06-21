@@ -37,12 +37,18 @@ public class Spaceship extends AbstractDrawable {
     }
 
     public void paint(Graphics dbg) {
-        dbg.setColor(Color.black);
+        dbg.setColor(Color.white);
         dbg.fillOval((int) center.x-SHIP_RADIUS, (int) center.y-SHIP_RADIUS, SHIP_DIAM, SHIP_DIAM);
         dbg.setColor(Color.red);
         dbg.drawLine((int) center.x, (int) center.y, (int) (center.x+(shipAimDirection.x*10)), (int) (center.y+(shipAimDirection.y*10)));
         dbg.setColor(Color.blue);
         dbg.drawLine((int) center.x, (int) center.y, (int) (center.x+(velocity.x*10)), (int) (center.y+(velocity.y*10)));
+        dbg.setColor(Color.green);
+        dbg.drawLine((int) (center.x+(velocity.x*10)), (int) (center.y+(velocity.y*10)), (int) (center.x+(velocity.x*10)+(acceleration.x*10)), (int) (center.y+(velocity.y*10)+(acceleration.y*10)));
+    }
+
+    public void setCenter(Vector2D newCenter) {
+        center = newCenter;
     }
 
 }

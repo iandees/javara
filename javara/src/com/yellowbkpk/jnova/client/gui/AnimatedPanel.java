@@ -79,7 +79,7 @@ public class AnimatedPanel extends JPanel implements Runnable {
         
         dbg = dbImage.getGraphics();
 
-        dbg.setColor(Color.white);
+        dbg.setColor(Color.black);
         dbg.fillRect(0, 0, size.width, size.height);
         
         drawField(dbg);
