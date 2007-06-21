@@ -33,9 +33,8 @@ public class Vector2D {
         y = (float) (Math.cos(deg) * shifted.y + Math.sin(deg) * shifted.x);
     }
 
-    public void scale(float scaleValue) {
-        x *= scaleValue;
-        y *= scaleValue;
+    public Vector2D scale(float scaleValue) {
+        return new Vector2D(x * scaleValue, y * scaleValue);
     }
     
     public float length() {
@@ -54,6 +53,10 @@ public class Vector2D {
 
     public Vector2D add(Vector2D other) {
         return this.add(other.x, other.y);
+    }
+
+    public Vector2D subtract(Vector2D other) {
+        return this.subtract(other.x, other.y);
     }
 
 }

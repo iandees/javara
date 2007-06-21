@@ -9,11 +9,13 @@ public class JNovaController extends Observable {
 
     private List<Drawable> drawables;
     private Spaceship spaceship;
+    private long prevTime;
     
     public JNovaController() {
         drawables = new ArrayList<Drawable>();
         spaceship = new Spaceship(new Vector2D(100f, 100f));
         drawables.add(spaceship);
+        prevTime = System.currentTimeMillis();
     }
     
     public synchronized void addItem(Point point) {
@@ -23,8 +25,11 @@ public class JNovaController extends Observable {
 
     public synchronized void update() {
         for (Drawable drawable : drawables) {
-            drawable.step();
+            long delta = System.currentTimeMillis() - prevTime;
+            drawable.step(delta);
         }
+        
+        prevTime = System.currentTimeMillis();
     }
 
     public List<Drawable> getDrawables() {
