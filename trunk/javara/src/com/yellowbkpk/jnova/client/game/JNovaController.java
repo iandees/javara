@@ -7,13 +7,14 @@ import java.util.Observable;
 
 public class JNovaController extends Observable {
 
+    private static final Vector2D CENTER = new Vector2D(100f, 100f);
     private List<Drawable> drawables;
     private Spaceship spaceship;
     private long prevTime;
     
     public JNovaController() {
         drawables = new ArrayList<Drawable>();
-        spaceship = new Spaceship(new Vector2D(100f, 100f));
+        spaceship = new Spaceship(CENTER);
         drawables.add(spaceship);
         prevTime = System.currentTimeMillis();
     }
@@ -36,6 +37,10 @@ public class JNovaController extends Observable {
 
     public Spaceship getShip() {
         return spaceship;
+    }
+
+    public void recenterShip() {
+        spaceship.setCenter(CENTER);
     }
 
 }

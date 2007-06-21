@@ -54,6 +54,8 @@ public class JNovaGUI implements Observer {
                     controller.getShip().rotateLeft();
                 } else if (KeyEvent.VK_D == e.getKeyCode()) {
                     controller.getShip().rotateRight();
+                } else if (KeyEvent.VK_SPACE == e.getKeyCode()) {
+                    controller.recenterShip();
                 }
             }
 
