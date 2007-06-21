@@ -1,0 +1,30 @@
+<project default="compile">
+	
+	<!-- The root for the source files. -->
+	<property name="src" value="src" />
+	
+	<!-- The root for the compiled files. -->
+	<property name="target" value="bin" />
+	
+	<!-- The "binary" files. i.e. JARs and apps. -->
+	<property name="bin" value="." />
+	
+	<property name="version" value="0.1" />
+	
+	<target name="compile">
+		<javac srcdir="${src}"
+			includes="**/*.java"
+			destdir="${target}" />
+	</target>
+	
+	<target name="jar" depends="compile">
+		<jar destfile="${bin}/jnova-${version}.jar"
+			basedir="${target}"
+			includes="**/*.class">
+            <manifest>
+                <attribute name="Version" value="${version}"/>
+                <attribute name="Build-Date" value="${TODAY}"/>
+            </manifest>
+		</jar>
+	</target>
+</project>
