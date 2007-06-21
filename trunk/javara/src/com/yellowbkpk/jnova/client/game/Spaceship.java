@@ -7,6 +7,8 @@ import java.awt.Graphics;
 
 public class Spaceship extends AbstractDrawable {
 
+    private static final int SHIP_DIAM = 16;
+    private static final int SHIP_RADIUS = SHIP_DIAM / 2;
     private final static float ROT_CONSTANT = 0.2f;
     private static final float ACC_CONSTANT = 0.2f;
     private Vector2D shipAimDirection;
@@ -36,8 +38,11 @@ public class Spaceship extends AbstractDrawable {
 
     public void paint(Graphics dbg) {
         dbg.setColor(Color.black);
-        dbg.fillOval((int) center.x, (int) center.y, 16, 16);
-        dbg.drawLine((int) center.x+8, (int) center.y+8, (int) (center.x+8+(shipAimDirection.x*10)), (int) (center.y+8+(shipAimDirection.y*10)));
+        dbg.fillOval((int) center.x-SHIP_RADIUS, (int) center.y-SHIP_RADIUS, SHIP_DIAM, SHIP_DIAM);
+        dbg.setColor(Color.red);
+        dbg.drawLine((int) center.x, (int) center.y, (int) (center.x+(shipAimDirection.x*10)), (int) (center.y+(shipAimDirection.y*10)));
+        dbg.setColor(Color.blue);
+        dbg.drawLine((int) center.x, (int) center.y, (int) (center.x+(velocity.x*10)), (int) (center.y+(velocity.y*10)));
     }
 
 }
