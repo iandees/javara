@@ -13,6 +13,7 @@ import java.util.Observer;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import com.yellowbkpk.jnova.client.game.JNovaController;
 
@@ -43,14 +44,15 @@ public class JNovaGUI implements Observer {
         
         frame.addKeyListener(new KeyAdapter() {
             
-            public void keyPressed(KeyEvent e) {
-                if(KeyEvent.VK_W == e.getKeyCode()) {
+            public void keyPressed(final KeyEvent e) {
+
+                if (KeyEvent.VK_W == e.getKeyCode()) {
                     controller.getShip().accelerateForward();
-                } else if(KeyEvent.VK_S == e.getKeyCode()) {
+                } else if (KeyEvent.VK_S == e.getKeyCode()) {
                     controller.getShip().accelerateBackward();
-                } else if(KeyEvent.VK_A == e.getKeyCode()) {
+                } else if (KeyEvent.VK_A == e.getKeyCode()) {
                     controller.getShip().rotateLeft();
-                } else if(KeyEvent.VK_D == e.getKeyCode()) {
+                } else if (KeyEvent.VK_D == e.getKeyCode()) {
                     controller.getShip().rotateRight();
                 }
             }
