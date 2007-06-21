@@ -26,6 +26,8 @@ public class AnimatedPanel extends JPanel implements Runnable {
 
     private JNovaController controller;
 
+    public static final long TIME_PER_FRAME = 8;
+
     public AnimatedPanel(JNovaController c, Dimension dimension) {
         controller = c;
         size = dimension;
@@ -57,7 +59,7 @@ public class AnimatedPanel extends JPanel implements Runnable {
             repaint();
 
             try {
-                Thread.sleep(10);
+                Thread.sleep(TIME_PER_FRAME);
             } catch (InterruptedException e) {
             }
         }

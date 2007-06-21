@@ -1,13 +1,12 @@
 package com.yellowbkpk.jnova.client.game;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import com.yellowbkpk.jnova.client.gui.AnimatedPanel;
 
 
-public class AbstractDrawable implements Drawable {
 
-    private static final float DAMP = 0.9f;
-    private static final long TIME_PER_FRAME = 10;
+public abstract class AbstractDrawable implements Drawable {
+
+    private static final float DAMP = 0.95f;
     protected Vector2D center;
     protected Vector2D velocity;
     protected Vector2D acceleration;
@@ -23,17 +22,12 @@ public class AbstractDrawable implements Drawable {
     }
 
     public void step(long delta) {
-        float scaleRelToTimeDelta = delta / TIME_PER_FRAME;
+        float scaleRelToTimeDelta = delta / AnimatedPanel.TIME_PER_FRAME;
 
         velocity = velocity.add(acceleration.scale(scaleRelToTimeDelta));
         center = center.add(velocity.scale(scaleRelToTimeDelta));
         velocity = velocity.scale(DAMP);
-    }
-
-    public void paint(Graphics dbg) {
-        dbg.setColor(Color.black);
-        dbg.fillOval((int) center.x, (int) center.y, 16, 16);
-        dbg.drawLine((int) center.x+8, (int) center.y+8, (int) (center.x+8+(velocity.x*10)), (int) (center.y+8+(velocity.y*10)));
+        acceleration = acceleration.scale(DAMP);
     }
 
     public String toString() {
