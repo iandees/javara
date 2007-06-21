@@ -6,7 +6,7 @@ import com.yellowbkpk.jnova.client.gui.AnimatedPanel;
 
 public abstract class AbstractDrawable implements Drawable {
 
-    private static final float DAMP = 0.95f;
+    private static final float DAMP = 0.97f;
     private static final float MAX_SPEED = 5;
     protected Vector2D center;
     protected Vector2D velocity;
