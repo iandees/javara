@@ -4,7 +4,7 @@ import java.awt.Graphics;
 
 public interface Drawable {
 
-    void step();
+    void step(long delta);
 
     void paint(Graphics dbg);
 
