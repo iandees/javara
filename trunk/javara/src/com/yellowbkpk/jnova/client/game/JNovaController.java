@@ -19,8 +19,6 @@ public class JNovaController extends Observable {
     }
     
     public synchronized void addItem(Point point) {
-        Vector2D loc = new Vector2D(point.x, point.y);
-        drawables.add(new AbstractDrawable(loc, new Vector2D(3, 3), new Vector2D(2, 2)));
     }
 
     public synchronized void update() {

@@ -1,10 +1,12 @@
 package com.yellowbkpk.jnova.client.game;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
 
 
 public class Spaceship extends AbstractDrawable {
 
-    private static final Vector2D ORIGIN = new Vector2D(0f, 0f);
     private final static float ROT_CONSTANT = 0.2f;
     private static final float ACC_CONSTANT = 0.2f;
     private Vector2D shipAimDirection;
@@ -15,7 +17,8 @@ public class Spaceship extends AbstractDrawable {
     }
 
     public void rotateLeft() {
-        acceleration = acceleration.add(acceleration.y*ROT_CONSTANT, -acceleration.x*ROT_CONSTANT);
+        shipAimDirection = shipAimDirection.add(shipAimDirection.y*ROT_CONSTANT, -shipAimDirection.x*ROT_CONSTANT);
+        shipAimDirection.normalize();
     }
 
     public void accelerateForward() {
@@ -23,11 +26,18 @@ public class Spaceship extends AbstractDrawable {
     }
 
     public void rotateRight() {
-        acceleration = acceleration.add(-acceleration.y*ROT_CONSTANT, acceleration.x*ROT_CONSTANT);
+        shipAimDirection = shipAimDirection.add(-shipAimDirection.y*ROT_CONSTANT, shipAimDirection.x*ROT_CONSTANT);
+        shipAimDirection.normalize();
     }
 
     public void accelerateBackward() {
         acceleration = acceleration.subtract(shipAimDirection.multiply(ACC_CONSTANT, ACC_CONSTANT));
+    }
+
+    public void paint(Graphics dbg) {
+        dbg.setColor(Color.black);
+        dbg.fillOval((int) center.x, (int) center.y, 16, 16);
+        dbg.drawLine((int) center.x+8, (int) center.y+8, (int) (center.x+8+(shipAimDirection.x*10)), (int) (center.y+8+(shipAimDirection.y*10)));
     }
 
 }

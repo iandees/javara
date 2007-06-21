@@ -38,7 +38,6 @@ public class JNovaGUI implements Observer {
         
         contentPane.addMouseListener(new MouseAdapter() {
             public void mouseClicked(final MouseEvent e) {
-                controller.addItem(e.getPoint());
             }
         });
         
