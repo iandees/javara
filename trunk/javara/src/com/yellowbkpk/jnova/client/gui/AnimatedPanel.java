@@ -26,7 +26,7 @@ public class AnimatedPanel extends JPanel implements Runnable {
 
     private JNovaController controller;
 
-    public static final long TIME_PER_FRAME = 8;
+    public static final long TIME_PER_FRAME = 10;
 
     public AnimatedPanel(JNovaController c, Dimension dimension) {
         controller = c;
