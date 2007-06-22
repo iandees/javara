@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class JNovaController extends Observable {
 
@@ -12,10 +13,14 @@ public class JNovaController extends Observable {
     private Spaceship spaceship;
     private long prevTime;
     
+    private JNovaClientThread networkClient;
+    private ConcurrentLinkedQueue<ServerClientMessage> pipe;
+    
     public JNovaController() {
         drawables = new ArrayList<Drawable>();
         spaceship = new Spaceship(CENTER);
         drawables.add(spaceship);
+        pipe = new ConcurrentLinkedQueue<ServerClientMessage>();
         prevTime = System.currentTimeMillis();
     }
     
@@ -41,6 +46,15 @@ public class JNovaController extends Observable {
 
     public void recenterShip() {
         spaceship.setCenter(CENTER);
+    }
+    
+    public void connectTo(String address) {
+        networkClient = new JNovaClientThread(address, pipe);
+        new Thread(networkClient).start();
+    }
+
+    public void disconnectFromServer() {
+        networkClient.shutdown();
     }
 
 }
