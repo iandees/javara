@@ -42,6 +42,10 @@ public class JNovaGUI extends JPanel implements Observer {
                 }
                 
                 if (keyboardState.isKeyPressed(KeyEvent.VK_SPACE)) {
+                    controller.getShip().shoot();
+                }
+                
+                if (keyboardState.isKeyPressed(KeyEvent.VK_C)) {
                     controller.recenterShip();
                 }
             }
