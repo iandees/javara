@@ -2,8 +2,8 @@ package com.yellowbkpk.jnova.client.game;
 
 import java.awt.Color;
 import java.awt.Graphics;
-
-
+import java.util.ArrayList;
+import java.util.List;
 
 public class Spaceship extends AbstractDrawable {
 
@@ -12,9 +12,11 @@ public class Spaceship extends AbstractDrawable {
     private final static float ROT_CONSTANT = 0.2f;
     private static final float ACC_CONSTANT = 0.2f;
     private Vector2D shipAimDirection;
+    private List<Bullet> bullets;
     
     public Spaceship(Vector2D initialLocation) {
         super(initialLocation);
+        bullets = new ArrayList<Bullet>();
         shipAimDirection = new Vector2D(1f, 0f);
     }
 
@@ -45,10 +47,40 @@ public class Spaceship extends AbstractDrawable {
         dbg.drawLine((int) center.x, (int) center.y, (int) (center.x+(velocity.x*10)), (int) (center.y+(velocity.y*10)));
         dbg.setColor(Color.green);
         dbg.drawLine((int) (center.x+(velocity.x*10)), (int) (center.y+(velocity.y*10)), (int) (center.x+(velocity.x*10)+(acceleration.x*10)), (int) (center.y+(velocity.y*10)+(acceleration.y*10)));
+        
+        synchronized(bullets) {
+        for (Bullet b : bullets) {
+            b.paint(dbg);
+        }
+        }
     }
 
     public void setCenter(Vector2D newCenter) {
         center = newCenter;
+    }
+
+    public void shoot() {
+        
+        synchronized (bullets) {
+            Bullet b = new Bullet(center, shipAimDirection, 1.0f);
+            bullets.add(b);
+        }        
+    }
+
+    public void step(long delta) {
+        super.step(delta);
+
+        synchronized (bullets) {
+            for(int i = 0; i < bullets.size(); i++) {
+                if(bullets.get(i).isDead()) {
+                    bullets.remove(i);
+                }
+            }
+            
+            for (Bullet b : bullets) {
+                b.step(delta);
+            }
+        }
     }
 
 }
