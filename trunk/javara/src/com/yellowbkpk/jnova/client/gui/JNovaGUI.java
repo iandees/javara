@@ -2,10 +2,11 @@ package com.yellowbkpk.jnova.client.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JPanel;
 
@@ -16,11 +17,36 @@ public class JNovaGUI extends JPanel implements Observer {
     private static final Dimension WINDOW_SIZE = new Dimension(800, 600);
     private JNovaController controller;
     private AnimatedPanel animatedPanel;
+    private KeyStateHolder keyboardState;
+    private Timer keyboardCheckerTimer;
 
     public JNovaGUI(JNovaController c) {
         super(new BorderLayout());
         controller = c;
         controller.addObserver(this);
+        
+        keyboardState = new KeyStateHolder();
+        keyboardCheckerTimer = new Timer();
+        TimerTask task  = new TimerTask() {
+            public void run() {
+                if (keyboardState.isKeyPressed(KeyEvent.VK_W)) {
+                    controller.getShip().accelerateForward();
+                } else if (keyboardState.isKeyPressed(KeyEvent.VK_S)) {
+                    controller.getShip().accelerateBackward();
+                }
+                
+                if (keyboardState.isKeyPressed(KeyEvent.VK_A)) {
+                    controller.getShip().rotateLeft();
+                } else if (keyboardState.isKeyPressed(KeyEvent.VK_D)) {
+                    controller.getShip().rotateRight();
+                }
+                
+                if (keyboardState.isKeyPressed(KeyEvent.VK_SPACE)) {
+                    controller.recenterShip();
+                }
+            }
+        };
+        keyboardCheckerTimer.scheduleAtFixedRate(task, 0, 50);
         
         initGUI();
     }
@@ -32,22 +58,7 @@ public class JNovaGUI extends JPanel implements Observer {
         animatedPanel = new AnimatedPanel(controller, WINDOW_SIZE);
         add(animatedPanel, BorderLayout.CENTER);
 
-        addKeyListener(new KeyAdapter() {
-            public void keyPressed(final KeyEvent e) {
-                if (KeyEvent.VK_W == e.getKeyCode()) {
-                    controller.getShip().accelerateForward();
-                } else if (KeyEvent.VK_S == e.getKeyCode()) {
-                    controller.getShip().accelerateBackward();
-                } else if (KeyEvent.VK_A == e.getKeyCode()) {
-                    controller.getShip().rotateLeft();
-                } else if (KeyEvent.VK_D == e.getKeyCode()) {
-                    controller.getShip().rotateRight();
-                } else if (KeyEvent.VK_SPACE == e.getKeyCode()) {
-                    controller.recenterShip();
-                }
-                e.consume();
-            }
-        });
+        addKeyListener(keyboardState);
     }
 
     public void update(Observable o, Object arg) {
