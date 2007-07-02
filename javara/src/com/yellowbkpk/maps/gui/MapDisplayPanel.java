@@ -12,20 +12,27 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+import com.yellowbkpk.maps.map.GLatLng;
 import com.yellowbkpk.maps.map.Map;
 
 public class MapDisplayPanel extends JPanel implements Runnable {
 
+    private static final int TILE_SIZE = 256;
     private static final long TIME_PER_FRAME = 10;
     private static final Dimension SIZE = new Dimension(800, 600);
+    private static final GLatLng DEFAULT_CENTER = new GLatLng(0, 0);
+    private static final int DEFAULT_ZOOM = 10;
+    
     private Map map;
     private Image dbImage;
     private Thread animator;
     private boolean running;
     private Graphics dbg;
-    private Point c;
     protected Point mousedownPoint;
-    protected Point originalC;
+    protected Point pixelCenter;
+    protected Point originalPixelCenter;
+    private SlidingWindow mapSlidingWindow;
+    protected GLatLng originalLatLngCenter;
 
     public MapDisplayPanel(Map m) {
         setPreferredSize(new Dimension(800,600));
@@ -33,13 +40,9 @@ public class MapDisplayPanel extends JPanel implements Runnable {
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 mousedownPoint = e.getPoint();
-                originalC = c;
-            }
-
-            public void mouseReleased(MouseEvent e) {
-                int dx = e.getX() - mousedownPoint.x;
-                int dy = e.getY() - mousedownPoint.y;
-                applyDrag(dx,dy);
+                originalPixelCenter = pixelCenter;
+                originalLatLngCenter = mapSlidingWindow.getCenter();
+                System.out.println(originalLatLngCenter);
             }
         });
         
@@ -47,22 +50,31 @@ public class MapDisplayPanel extends JPanel implements Runnable {
             public void mouseDragged(MouseEvent e) {
                 int dx = e.getX() - mousedownPoint.x;
                 int dy = e.getY() - mousedownPoint.y;
-                Point newPoint = new Point(originalC.x + dx, originalC.y + dy);
-                dragTo(newPoint);
+                pixelCenter = new Point(originalPixelCenter.x + dx, originalPixelCenter.y + dy);
+                
+                // Convert the new pixel center to a new lat/lng center
+                double dLng = GoogleMapUtilities.xToLng(dx);
+                double dLat = GoogleMapUtilities.yToLat(dy);
+                System.out.println(dLat+","+dLng);
+                
+                mapSlidingWindow.setCenter(new GLatLng(originalLatLngCenter.getLatitude() + dLat, originalLatLngCenter.getLongitude() + dLng));
+                
+                // Update the sliding window with a new center
+                //mapSlidingWindow.setCenter();
             }
         });
         
-        c = new Point(50,50);
+        pixelCenter = new Point(0,0);
         map = m;
+        mapSlidingWindow = new SlidingWindow(map, DEFAULT_CENTER, SIZE, DEFAULT_ZOOM);
     }
 
-    protected void applyDrag(int dx, int dy) {
-        // TODO Auto-generated method stub
-        
+    protected double pixelsToLongitude(int dy, int zoom) {
+        return 0;
     }
 
-    protected void dragTo(Point p) {
-        c = p;
+    protected double pixelsToLatitude(int dx, int zoom) {
+        return 0;
     }
 
     public void addNotify() {
@@ -117,8 +129,37 @@ public class MapDisplayPanel extends JPanel implements Runnable {
     }
 
     private void drawField(Graphics dbg2) {
-        dbg2.setColor(Color.red);
-        dbg2.drawOval(c.x, c.y, 2, 2);
+        
+            // Get the northwest corner tile x and y coordinates
+            int nwXPixels = GoogleMapUtilities.lngToX(mapSlidingWindow.getNorthwest().getLongitude());
+            int nwYPixels = GoogleMapUtilities.latToY(mapSlidingWindow.getNorthwest().getLatitude());
+            
+            // Get the southeast corner tile x and y coordinates
+            int seXPixels = GoogleMapUtilities.lngToX(mapSlidingWindow.getSoutheast().getLongitude());
+            int seYPixels = GoogleMapUtilities.latToY(mapSlidingWindow.getSoutheast().getLatitude());
+            
+            // Get the northwest tile number
+            int nwTileX = GoogleMapUtilities.xToTileX(nwXPixels, mapSlidingWindow.getZoom());
+            int nwTileY = GoogleMapUtilities.yToTileY(nwYPixels, mapSlidingWindow.getZoom());
+            
+            // Get the southeast tile number
+            int seTileX = GoogleMapUtilities.xToTileX(seXPixels, mapSlidingWindow.getZoom());
+            int seTileY = GoogleMapUtilities.yToTileY(seYPixels, mapSlidingWindow.getZoom());
+            
+            // Loop from northwest to southeast and draw the tiles
+            for(int x = nwTileX; x <= seTileX; x++) {
+                for(int y = nwTileY; y <= seTileY; y++) {
+                    // Convert the tile x,y to global-pixel coordinates
+                    int tilePixelX = GoogleMapUtilities.tileXToX(x, mapSlidingWindow.getZoom());
+                    int tilePixelY = GoogleMapUtilities.tileYToY(y, mapSlidingWindow.getZoom());
+                    
+                    // Convert the global-pixel coordinates to local-pixel coordinates
+                }
+            }
+            
+            dbg2.setColor(Color.white);
+            dbg2.drawString(nwTileX+","+nwTileY, 0, 9);
+            dbg2.drawString(seTileX+","+seTileY, SIZE.width-150, SIZE.height-6);
     }
 
     private Image createImage(Dimension size) {
