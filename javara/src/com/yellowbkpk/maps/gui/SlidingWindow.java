@@ -88,7 +88,7 @@ public class SlidingWindow {
         return southeast.getLongitude();
     }
     
-    public void zoomIn() {
+    public void zoomOut() {
         if(zoom - 1 < MIN_ZOOM) {
             return;
         } else {
@@ -99,7 +99,7 @@ public class SlidingWindow {
         updateWindow();
     }
     
-    public void zoomOut() {
+    public void zoomIn() {
         if(zoom + 1 > MAX_ZOOM) {
             return;
         } else {
