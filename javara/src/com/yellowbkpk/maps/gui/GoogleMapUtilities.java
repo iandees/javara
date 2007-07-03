@@ -194,4 +194,8 @@ public final class GoogleMapUtilities {
     public static int tileYToY(int tileY) {
         return tileY * GOOG_PIXELS;
     }
+
+    public static int tilesAtZoom(int zoom) {
+        return NUM_TILES[zoom];
+    }
 }
