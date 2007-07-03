@@ -2,8 +2,6 @@ package com.yellowbkpk.maps.gui;
 
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
 
 import com.yellowbkpk.maps.map.GLatLng;
 import com.yellowbkpk.maps.map.Map;
@@ -18,10 +16,10 @@ public class SlidingWindow {
     private int zoom;
     
     private GLatLng center;
-    private double latHeight;
-    private double lngWidth;
     private GLatLng northwest;
     private Dimension pixelSize;
+    private GLatLng southeast;
+    private Point pixelCenter;
 
     public SlidingWindow(Map m, GLatLng cent, Dimension size, int z) {
         map = m;
@@ -34,25 +32,28 @@ public class SlidingWindow {
 
     private void updateWindow() {
         // Convert the lat/lng center to global-pixel coordinates
-        Point bitmapCoordinate = GoogleMapUtilities.getBitmapCoordinate(center.getLatitude(), center.getLongitude(), zoom);
-        
-        int centerX = GoogleMapUtilities.lngToX(center.getLongitude());
-        int centerY = GoogleMapUtilities.latToY(center.getLatitude());
-        int bitmapOrigin = 256 << (17 - zoom);
+        int centerX = GoogleMapUtilities.lngToX(center.getLongitude(), 17-zoom);
+        int centerY = GoogleMapUtilities.latToY(center.getLatitude(), 17-zoom);
+        pixelCenter = new Point(centerX, centerY);
         
         // Determine the northwest pixel coordinates
-        int nwX = bitmapCoordinate.x - (pixelSize.width / 2);
-        int nwY = bitmapCoordinate.y - (pixelSize.height / 2);
+        int nwX = centerX - (pixelSize.width / 2);
+        int nwY = centerY - (pixelSize.height / 2);
+        
+        // Determine the southeast pixel coordinates
+        int seX = centerX + (pixelSize.width / 2);
+        int seY = centerY + (pixelSize.height / 2);
         
         // Convert the northwest pixel coordinates back to lat/lng
-        double nwLat = GoogleMapUtilities.xToLng(nwX);
-        double nwLng = GoogleMapUtilities.yToLat(nwY);
+        double nwLat = GoogleMapUtilities.yToLat(nwY, 17-zoom);
+        double nwLng = GoogleMapUtilities.xToLng(nwX, 17-zoom);
         
-//        northwest = new GLatLng(nwLat, nwLng);
+        // Convert the southeast pixel coordinates back to lat/lng
+        double seLat = GoogleMapUtilities.yToLat(seY, 17-zoom);
+        double seLng = GoogleMapUtilities.xToLng(seX, 17-zoom);
         
-        // Convert the pixel window dimension to lat/lng
-        latHeight = GoogleMapUtilities.yToLat(pixelSize.height);
-        lngWidth = GoogleMapUtilities.xToLng(pixelSize.width);
+        northwest = new GLatLng(nwLat, nwLng);
+        southeast = new GLatLng(seLat, seLng);
     }
     
     public GLatLng getNorthwest() {
@@ -76,7 +77,7 @@ public class SlidingWindow {
     }
     
     public double getLatSouth() {
-        return northwest.getLatitude()+latHeight;
+        return southeast.getLatitude();
     }
     
     public double getLngWest() {
@@ -84,7 +85,7 @@ public class SlidingWindow {
     }
     
     public double getLngEast() {
-        return northwest.getLongitude()+lngWidth;
+        return southeast.getLongitude();
     }
     
     public void zoomIn() {
@@ -122,6 +123,20 @@ public class SlidingWindow {
     public void setCenter(GLatLng c) {
         setCenter(c, zoom);
     }
+    
+    public void setPixelCenter(Point c) {
+        setPixelCenter(c, zoom);
+    }
+    
+    public void setPixelCenter(Point c, int z) {
+        pixelCenter = c;
+        zoom = z;
+        
+        double centerLat = GoogleMapUtilities.yToLat(pixelCenter.y, (17-zoom));
+        double centerLng = GoogleMapUtilities.xToLng(pixelCenter.x, (17-zoom));
+        GLatLng centerLatLng = new GLatLng(centerLat, centerLng);
+        setCenter(centerLatLng);
+    }
 
     public GLatLng getCenter() {
         return center;
@@ -129,6 +144,10 @@ public class SlidingWindow {
 
     public int getZoom() {
         return zoom;
+    }
+
+    public Point getGlobalPixelCenter() {
+        return pixelCenter;
     }
 
 }
