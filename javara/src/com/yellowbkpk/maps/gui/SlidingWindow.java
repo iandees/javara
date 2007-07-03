@@ -150,4 +150,10 @@ public class SlidingWindow {
         return pixelCenter;
     }
 
+    public void resize(Dimension size) {
+        pixelSize = size;
+        
+        updateWindow();
+    }
+
 }

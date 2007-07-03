@@ -5,11 +5,14 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import com.yellowbkpk.maps.map.GLatLng;
@@ -31,11 +34,13 @@ public class MapDisplayPanel extends JPanel implements Runnable {
     protected Point mousedownPoint;
     protected Point originalPixelCenter;
     private SlidingWindow mapSlidingWindow;
+    private ImageCache imageCache;
 
     public MapDisplayPanel(Map m) {
         setPreferredSize(new Dimension(800,600));
         
         map = m;
+        imageCache = new ImageCache();
         mapSlidingWindow = new SlidingWindow(map, DEFAULT_CENTER, SIZE, DEFAULT_ZOOM);
         
         addMouseListener(new MouseAdapter() {
@@ -49,21 +54,20 @@ public class MapDisplayPanel extends JPanel implements Runnable {
             public void mouseDragged(MouseEvent e) {
                 int dx = e.getX() - mousedownPoint.x;
                 int dy = e.getY() - mousedownPoint.y;
-                int newPixelCenterX = originalPixelCenter.x + dx;
-                int newPixelCenterY = originalPixelCenter.y + dy;
+                int newPixelCenterX = originalPixelCenter.x - dx;
+                int newPixelCenterY = originalPixelCenter.y - dy;
                 Point newPixelCenter = new Point(newPixelCenterX, newPixelCenterY);
                 
                 mapSlidingWindow.setPixelCenter(newPixelCenter);
             }
         });
-    }
-
-    protected double pixelsToLongitude(int dy, int zoom) {
-        return 0;
-    }
-
-    protected double pixelsToLatitude(int dx, int zoom) {
-        return 0;
+        
+        addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+                dbImage = createImage(getSize());
+                mapSlidingWindow.resize(getSize());
+            }
+        });
     }
 
     public void addNotify() {
@@ -112,14 +116,14 @@ public class MapDisplayPanel extends JPanel implements Runnable {
         dbg = dbImage.getGraphics();
 
         dbg.setColor(Color.gray);
-        dbg.fillRect(0, 0, SIZE.width, SIZE.height);
+        dbg.fillRect(0, 0, dbImage.getWidth(this), dbImage.getHeight(this));
         
         drawField(dbg);
     }
 
     private void drawField(Graphics dbg2) {
 
-        dbg2.setColor(Color.white);
+            dbg2.setColor(Color.white);
             final int zoomLevel = (17-mapSlidingWindow.getZoom());
         
             // Get the northwest corner tile x and y coordinates
@@ -151,7 +155,13 @@ public class MapDisplayPanel extends JPanel implements Runnable {
                     int localTilePixelX = tilePixelX - nwXPixels;
                     int localTilePixelY = tilePixelY - nwYPixels;
                     
-                    dbg2.drawRect(localTilePixelX, localTilePixelY, 256, 256);
+                    // Fetch the image
+                    ImageIcon imageIcon = imageCache.get(x,y,zoomLevel);
+                    Image image = imageIcon.getImage();
+                    dbg2.drawImage(image, localTilePixelX, localTilePixelY, this);
+                    
+                    //dbg2.drawRect(localTilePixelX, localTilePixelY, 256, 256);
+                    //dbg2.drawString("("+x+","+y+")", localTilePixelX+1, localTilePixelY+11);
                 }
             }
             
