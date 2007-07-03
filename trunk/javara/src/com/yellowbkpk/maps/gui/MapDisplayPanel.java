@@ -35,11 +35,16 @@ public class MapDisplayPanel extends JPanel implements Runnable {
     protected Point originalPixelCenter;
     private SlidingWindow mapSlidingWindow;
     private ImageCache imageCache;
+    private Image loadingTileImage;
 
     public MapDisplayPanel(Map m) {
         setPreferredSize(new Dimension(800,600));
         
         map = m;
+        loadingTileImage = new BufferedImage(TILE_SIZE, TILE_SIZE, BufferedImage.TYPE_INT_RGB);
+        Graphics graphics = loadingTileImage.getGraphics();
+        graphics.setColor(Color.gray);
+        graphics.drawString("Loading...", 120, 128);
         imageCache = new ImageCache();
         mapSlidingWindow = new SlidingWindow(map, DEFAULT_CENTER, SIZE, DEFAULT_ZOOM);
         
@@ -47,6 +52,10 @@ public class MapDisplayPanel extends JPanel implements Runnable {
             public void mousePressed(MouseEvent e) {
                 mousedownPoint = e.getPoint();
                 originalPixelCenter = mapSlidingWindow.getGlobalPixelCenter();
+                
+                if(e.getClickCount() == 2) {
+                    mapSlidingWindow.zoomIn();
+                }
             }
         });
         
@@ -117,7 +126,7 @@ public class MapDisplayPanel extends JPanel implements Runnable {
 
         dbg.setColor(Color.gray);
         dbg.fillRect(0, 0, dbImage.getWidth(this), dbImage.getHeight(this));
-        
+
         drawField(dbg);
     }
 
@@ -143,7 +152,7 @@ public class MapDisplayPanel extends JPanel implements Runnable {
             //Point seTile = GoogleMapUtilities.getTileCoordinate(mapSlidingWindow.getSoutheast().getLatitude(), mapSlidingWindow.getSoutheast().getLongitude(), zoomLevel);
             int seTileX = GoogleMapUtilities.xToTileX(seXPixels);
             int seTileY = GoogleMapUtilities.yToTileY(seYPixels);
-            
+
             // Loop from northwest to southeast and draw the tiles
             for(int x = nwTileX; x <= seTileX; x++) {
                 for(int y = nwTileY; y <= seTileY; y++) {
@@ -156,8 +165,12 @@ public class MapDisplayPanel extends JPanel implements Runnable {
                     int localTilePixelY = tilePixelY - nwYPixels;
                     
                     // Fetch the image
-                    ImageIcon imageIcon = imageCache.get(x,y,zoomLevel);
-                    Image image = imageIcon.getImage();
+                    Image image = imageCache.get(x,y,zoomLevel);
+                    
+                    if(image == null) {
+                        image = loadingTileImage;
+                    }
+                    
                     dbg2.drawImage(image, localTilePixelX, localTilePixelY, this);
                     
                     //dbg2.drawRect(localTilePixelX, localTilePixelY, 256, 256);
@@ -165,9 +178,6 @@ public class MapDisplayPanel extends JPanel implements Runnable {
                 }
             }
             
-            dbg2.setColor(Color.white);
-            dbg2.drawString(nwTileX+","+nwTileY, 0, 9);
-            dbg2.drawString(seTileX+","+seTileY, SIZE.width-150, SIZE.height-6);
     }
 
     private Image createImage(Dimension size) {
