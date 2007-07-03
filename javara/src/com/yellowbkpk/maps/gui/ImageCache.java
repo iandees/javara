@@ -1,7 +1,10 @@
 package com.yellowbkpk.maps.gui;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.MediaTracker;
+import java.awt.image.BufferedImage;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -12,11 +15,20 @@ import javax.swing.ImageIcon;
 
 public class ImageCache {
     
+    private static final int TILE_SIZE = 256;
     ConcurrentHashMap<String, Image> cacheMap;
     Map<String, Thread> imgFetchers;
     private String baseURL = "http://mt3.google.com/mt?n=404&v=w2.56&";
+    private BufferedImage noImageTile;
     
     public ImageCache() {
+        noImageTile = new BufferedImage(TILE_SIZE, TILE_SIZE, BufferedImage.TYPE_INT_RGB);
+        Graphics graphics = noImageTile.getGraphics();
+        graphics.setColor(Color.gray);
+        graphics.fillRect(0, 0, TILE_SIZE, TILE_SIZE);
+        graphics.setColor(Color.white);
+        graphics.drawString("No Image", 120, 128);
+        
         cacheMap = new ConcurrentHashMap<String, Image>();
         imgFetchers = new HashMap<String, Thread>();
     }
@@ -25,11 +37,11 @@ public class ImageCache {
         final int tilesAtZoom = GoogleMapUtilities.tilesAtZoom(zoom);
 
         if (y < 0) {
-            return null;
+            return noImageTile;
         }
 
         if (y > tilesAtZoom) {
-            return null;
+            return noImageTile;
         }
         
         int correctedX = x;
