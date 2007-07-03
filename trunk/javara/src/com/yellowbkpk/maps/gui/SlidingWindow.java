@@ -1,6 +1,9 @@
 package com.yellowbkpk.maps.gui;
 
 import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 
 import com.yellowbkpk.maps.map.GLatLng;
 import com.yellowbkpk.maps.map.Map;
@@ -31,18 +34,21 @@ public class SlidingWindow {
 
     private void updateWindow() {
         // Convert the lat/lng center to global-pixel coordinates
+        Point bitmapCoordinate = GoogleMapUtilities.getBitmapCoordinate(center.getLatitude(), center.getLongitude(), zoom);
+        
         int centerX = GoogleMapUtilities.lngToX(center.getLongitude());
         int centerY = GoogleMapUtilities.latToY(center.getLatitude());
+        int bitmapOrigin = 256 << (17 - zoom);
         
         // Determine the northwest pixel coordinates
-        int nwX = centerX - (pixelSize.width / 2);
-        int nwY = centerY - (pixelSize.height / 2);
+        int nwX = bitmapCoordinate.x - (pixelSize.width / 2);
+        int nwY = bitmapCoordinate.y - (pixelSize.height / 2);
         
         // Convert the northwest pixel coordinates back to lat/lng
         double nwLat = GoogleMapUtilities.xToLng(nwX);
         double nwLng = GoogleMapUtilities.yToLat(nwY);
         
-        northwest = new GLatLng(nwLat, nwLng);
+//        northwest = new GLatLng(nwLat, nwLng);
         
         // Convert the pixel window dimension to lat/lng
         latHeight = GoogleMapUtilities.yToLat(pixelSize.height);
@@ -54,15 +60,15 @@ public class SlidingWindow {
     }
     
     public GLatLng getNortheast() {
-        return new GLatLng(northwest.getLatitude(), northwest.getLongitude()+lngWidth);
+        return new GLatLng(getLatNorth(), getLngEast());
     }
     
     public GLatLng getSoutheast() {
-        return new GLatLng(northwest.getLatitude()+latHeight, northwest.getLongitude()+lngWidth);
+        return new GLatLng(getLatSouth(), getLngEast());
     }
     
     public GLatLng getSouthwest() {
-        return new GLatLng(northwest.getLatitude()+latHeight, northwest.getLongitude());
+        return new GLatLng(getLatSouth(), getLngWest());
     }
     
     public double getLatNorth() {
