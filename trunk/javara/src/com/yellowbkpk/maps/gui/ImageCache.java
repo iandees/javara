@@ -22,7 +22,26 @@ public class ImageCache {
     }
     
     public Image get(int x, int y, int zoom) {
-        final String url = baseURL + "x=" + x + "&y=" + y + "&zoom=" + zoom;
+        final int tilesAtZoom = GoogleMapUtilities.tilesAtZoom(zoom);
+
+        if (y < 0) {
+            return null;
+        }
+
+        if (y > tilesAtZoom) {
+            return null;
+        }
+        
+        int correctedX = x;
+        if (x >= tilesAtZoom) {
+            correctedX = x - tilesAtZoom;
+        }
+
+        if (x < 0) {
+            correctedX = x + tilesAtZoom;
+        }
+        
+        final String url = baseURL + "x=" + correctedX + "&y=" + y + "&zoom=" + zoom;
 
         Image image = cacheMap.get(url);
 
@@ -59,6 +78,10 @@ public class ImageCache {
         } else {
             return image;
         }
+    }
+
+    private void correctRotatedEarth(int x, int y, int zoom) {
+        
     }
 
 }
