@@ -21,7 +21,7 @@ public class MapDisplayPanel extends JPanel implements Runnable {
     private static final long TIME_PER_FRAME = 10;
     private static final Dimension SIZE = new Dimension(800, 600);
     private static final GLatLng DEFAULT_CENTER = new GLatLng(0, 0);
-    private static final int DEFAULT_ZOOM = 10;
+    private static final int DEFAULT_ZOOM = 4;
     
     private Map map;
     private Image dbImage;
@@ -29,20 +29,19 @@ public class MapDisplayPanel extends JPanel implements Runnable {
     private boolean running;
     private Graphics dbg;
     protected Point mousedownPoint;
-    protected Point pixelCenter;
     protected Point originalPixelCenter;
     private SlidingWindow mapSlidingWindow;
-    protected GLatLng originalLatLngCenter;
 
     public MapDisplayPanel(Map m) {
         setPreferredSize(new Dimension(800,600));
         
+        map = m;
+        mapSlidingWindow = new SlidingWindow(map, DEFAULT_CENTER, SIZE, DEFAULT_ZOOM);
+        
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 mousedownPoint = e.getPoint();
-                originalPixelCenter = pixelCenter;
-                originalLatLngCenter = mapSlidingWindow.getCenter();
-                System.out.println(originalLatLngCenter);
+                originalPixelCenter = mapSlidingWindow.getGlobalPixelCenter();
             }
         });
         
@@ -50,23 +49,13 @@ public class MapDisplayPanel extends JPanel implements Runnable {
             public void mouseDragged(MouseEvent e) {
                 int dx = e.getX() - mousedownPoint.x;
                 int dy = e.getY() - mousedownPoint.y;
-                pixelCenter = new Point(originalPixelCenter.x + dx, originalPixelCenter.y + dy);
+                int newPixelCenterX = originalPixelCenter.x + dx;
+                int newPixelCenterY = originalPixelCenter.y + dy;
+                Point newPixelCenter = new Point(newPixelCenterX, newPixelCenterY);
                 
-                // Convert the new pixel center to a new lat/lng center
-                double dLng = GoogleMapUtilities.xToLng(dx);
-                double dLat = GoogleMapUtilities.yToLat(dy);
-                System.out.println(dLat+","+dLng);
-                
-                mapSlidingWindow.setCenter(new GLatLng(originalLatLngCenter.getLatitude() + dLat, originalLatLngCenter.getLongitude() + dLng));
-                
-                // Update the sliding window with a new center
-                //mapSlidingWindow.setCenter();
+                mapSlidingWindow.setPixelCenter(newPixelCenter);
             }
         });
-        
-        pixelCenter = new Point(0,0);
-        map = m;
-        mapSlidingWindow = new SlidingWindow(map, DEFAULT_CENTER, SIZE, DEFAULT_ZOOM);
     }
 
     protected double pixelsToLongitude(int dy, int zoom) {
@@ -129,31 +118,40 @@ public class MapDisplayPanel extends JPanel implements Runnable {
     }
 
     private void drawField(Graphics dbg2) {
+
+        dbg2.setColor(Color.white);
+            final int zoomLevel = (17-mapSlidingWindow.getZoom());
         
             // Get the northwest corner tile x and y coordinates
-            int nwXPixels = GoogleMapUtilities.lngToX(mapSlidingWindow.getNorthwest().getLongitude());
-            int nwYPixels = GoogleMapUtilities.latToY(mapSlidingWindow.getNorthwest().getLatitude());
+            int nwXPixels = GoogleMapUtilities.lngToX(mapSlidingWindow.getNorthwest().getLongitude(), zoomLevel);
+            int nwYPixels = GoogleMapUtilities.latToY(mapSlidingWindow.getNorthwest().getLatitude(), zoomLevel);
             
             // Get the southeast corner tile x and y coordinates
-            int seXPixels = GoogleMapUtilities.lngToX(mapSlidingWindow.getSoutheast().getLongitude());
-            int seYPixels = GoogleMapUtilities.latToY(mapSlidingWindow.getSoutheast().getLatitude());
+            int seXPixels = GoogleMapUtilities.lngToX(mapSlidingWindow.getSoutheast().getLongitude(), zoomLevel);
+            int seYPixels = GoogleMapUtilities.latToY(mapSlidingWindow.getSoutheast().getLatitude(), zoomLevel);
             
             // Get the northwest tile number
-            int nwTileX = GoogleMapUtilities.xToTileX(nwXPixels, mapSlidingWindow.getZoom());
-            int nwTileY = GoogleMapUtilities.yToTileY(nwYPixels, mapSlidingWindow.getZoom());
+            //Point nwTile = GoogleMapUtilities.getTileCoordinate(mapSlidingWindow.getNorthwest().getLatitude(), mapSlidingWindow.getNorthwest().getLongitude(), zoomLevel);
+            int nwTileX = GoogleMapUtilities.xToTileX(nwXPixels);
+            int nwTileY = GoogleMapUtilities.yToTileY(nwYPixels);
             
             // Get the southeast tile number
-            int seTileX = GoogleMapUtilities.xToTileX(seXPixels, mapSlidingWindow.getZoom());
-            int seTileY = GoogleMapUtilities.yToTileY(seYPixels, mapSlidingWindow.getZoom());
+            //Point seTile = GoogleMapUtilities.getTileCoordinate(mapSlidingWindow.getSoutheast().getLatitude(), mapSlidingWindow.getSoutheast().getLongitude(), zoomLevel);
+            int seTileX = GoogleMapUtilities.xToTileX(seXPixels);
+            int seTileY = GoogleMapUtilities.yToTileY(seYPixels);
             
             // Loop from northwest to southeast and draw the tiles
             for(int x = nwTileX; x <= seTileX; x++) {
                 for(int y = nwTileY; y <= seTileY; y++) {
                     // Convert the tile x,y to global-pixel coordinates
-                    int tilePixelX = GoogleMapUtilities.tileXToX(x, mapSlidingWindow.getZoom());
-                    int tilePixelY = GoogleMapUtilities.tileYToY(y, mapSlidingWindow.getZoom());
+                    int tilePixelX = GoogleMapUtilities.tileXToX(x);
+                    int tilePixelY = GoogleMapUtilities.tileYToY(y);
                     
                     // Convert the global-pixel coordinates to local-pixel coordinates
+                    int localTilePixelX = tilePixelX - nwXPixels;
+                    int localTilePixelY = tilePixelY - nwYPixels;
+                    
+                    dbg2.drawRect(localTilePixelX, localTilePixelY, 256, 256);
                 }
             }
             
