@@ -7,12 +7,13 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import com.yellowbkpk.maps.map.GLatLng;
@@ -21,10 +22,11 @@ import com.yellowbkpk.maps.map.Map;
 public class MapDisplayPanel extends JPanel implements Runnable {
 
     private static final int TILE_SIZE = 256;
-    private static final long TIME_PER_FRAME = 10;
+    private static final long TIME_PER_FRAME = 60;
     private static final Dimension SIZE = new Dimension(800, 600);
-    private static final GLatLng DEFAULT_CENTER = new GLatLng(0, 0);
+    private static final GLatLng DEFAULT_CENTER = new GLatLng(43, -90);
     private static final int DEFAULT_ZOOM = 4;
+	protected static final double MAX_PAN_VELOCITY = 3.0;
     
     private Map map;
     private Image dbImage;
@@ -39,6 +41,7 @@ public class MapDisplayPanel extends JPanel implements Runnable {
 
     public MapDisplayPanel(Map m) {
         setPreferredSize(new Dimension(800,600));
+        setFocusable(true);
         
         map = m;
         loadingTileImage = new BufferedImage(TILE_SIZE, TILE_SIZE, BufferedImage.TYPE_INT_RGB);
@@ -76,6 +79,69 @@ public class MapDisplayPanel extends JPanel implements Runnable {
                 dbImage = createImage(getSize());
                 mapSlidingWindow.resize(getSize());
             }
+        });
+        
+        addKeyListener(new KeyAdapter() {
+			private double panVelocity = 0.0;
+
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_UP) {
+					panVelocity += 0.2;
+
+					if (panVelocity > MAX_PAN_VELOCITY) {
+						panVelocity = MAX_PAN_VELOCITY;
+					}
+
+					GLatLng center = mapSlidingWindow.getCenter();
+					GLatLng newCenter = new GLatLng(center.getLatitude()
+							+ panVelocity, center.getLongitude());
+
+					mapSlidingWindow.setCenter(newCenter);
+				} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+					panVelocity += 0.2;
+
+					if (panVelocity > MAX_PAN_VELOCITY) {
+						panVelocity = MAX_PAN_VELOCITY;
+					}
+
+					GLatLng center = mapSlidingWindow.getCenter();
+					GLatLng newCenter = new GLatLng(center.getLatitude()
+							- panVelocity, center.getLongitude());
+
+					mapSlidingWindow.setCenter(newCenter);
+				} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+					panVelocity += 0.2;
+
+					if (panVelocity > MAX_PAN_VELOCITY) {
+						panVelocity = MAX_PAN_VELOCITY;
+					}
+
+					GLatLng center = mapSlidingWindow.getCenter();
+					GLatLng newCenter = new GLatLng(center.getLatitude()
+							, center.getLongitude() - panVelocity);
+
+					mapSlidingWindow.setCenter(newCenter);
+				} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+					panVelocity += 0.2;
+
+					if (panVelocity > MAX_PAN_VELOCITY) {
+						panVelocity = MAX_PAN_VELOCITY;
+					}
+
+					GLatLng center = mapSlidingWindow.getCenter();
+					GLatLng newCenter = new GLatLng(center.getLatitude()
+							, center.getLongitude() + panVelocity);
+
+					mapSlidingWindow.setCenter(newCenter);
+				} 
+			}
+
+			public void keyReleased(KeyEvent e) {
+				panVelocity = 0.0;
+			}
+
+			public void keyTyped(KeyEvent e) {
+			}
         });
     }
 
