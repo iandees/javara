@@ -133,7 +133,11 @@ public class MapDisplayPanel extends JPanel implements Runnable {
 							, center.getLongitude() + panVelocity);
 
 					mapSlidingWindow.setCenter(newCenter);
-				} 
+				} else if (e.getKeyCode() == KeyEvent.VK_EQUALS) {
+					mapSlidingWindow.zoomIn();
+				} else if (e.getKeyCode() == KeyEvent.VK_MINUS) {
+					mapSlidingWindow.zoomOut();
+				}
 			}
 
 			public void keyReleased(KeyEvent e) {
