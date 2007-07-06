@@ -71,10 +71,8 @@ public class ImageCache {
             final File file = new File(filename);
             
             if (file.exists()) {
-                System.err.print("Cache: File exists: ");
                 Thread thread = imgFetchers.get(url);
                 if (thread == null) {
-                    System.err.println("starting file fetcher");
                     Thread imgFetcher = new Thread(new Runnable() {
                         public void run() {
                             Image image = new ImageIcon(file.getPath()).getImage();
@@ -86,16 +84,13 @@ public class ImageCache {
                     imgFetcher.start();
                     return null;
                 } else {
-                    System.err.println("file already being fetched");
                     // Already fetching it from a file.
                     return null;
                 }
             } else {
-                System.err.print("Cache: File does not exist: ");
                 // If the image is not already being fetched
                 Thread thread = imgFetchers.get(url);
                 if (thread == null) {
-                    System.err.println("starting url fetcher");
                     Thread imgFetcher = new Thread(new Runnable() {
                         public void run() {
                             URL u = null;
@@ -103,7 +98,6 @@ public class ImageCache {
                                 u = new URL(url);
                             } catch (MalformedURLException e) {
                                 e.printStackTrace();
-                                System.err.println("Bad URL");
                                 return;
                             }
 
@@ -134,7 +128,6 @@ public class ImageCache {
                     imgFetcher.start();
                     return null;
                 } else {
-                    System.err.println("already fetching url");
                     // Already fetching it.
                     return null;
                 }
