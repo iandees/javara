@@ -198,4 +198,42 @@ public final class GoogleMapUtilities {
     public static int tilesAtZoom(int zoom) {
         return NUM_TILES[zoom];
     }
+    
+    public static String getSatelliteRef(double lat, double lng, int zoom) {
+        Point tileXY = new Point(lngToX(lng, zoom), latToY(lat, zoom));
+        int invZoom  = 17 - zoom;
+        int stepSize = 1 << (17 - zoom);
+        int currentX = 0;
+        int currentY = 0;
+
+        StringBuffer satString = new StringBuffer(zoom);
+        satString.append("t");
+
+        for (int i = 0; i < invZoom; i++) {
+           stepSize >>= 1;
+
+           if ((currentY + stepSize) > tileXY.y) {
+              if ((currentX + stepSize) > tileXY.x) {
+                 satString.append('q');
+              }
+              else {
+                 currentX += stepSize;
+                 satString.append('r');
+              }
+           }
+           else {
+              currentY += stepSize;
+
+              if ((currentX + stepSize) > tileXY.x) {
+                 satString.append('t');
+              }
+              else {
+                 currentX += stepSize;
+                 satString.append('s');
+              }
+           }
+        }
+
+        return satString.toString();
+     }
 }
