@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -12,6 +13,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class AFMImageReader {
 
@@ -65,7 +67,7 @@ public class AFMImageReader {
         
         for(int x = 0; x < FIELD_X; x++) {
             for(int y = 0; y < FIELD_Y; y++) {
-                int rgb = Color.HSBtoRGB(((float) dataArr[y][x] / (float) maxResult), 1, 1);
+                int rgb = Color.HSBtoRGB(((float) (dataArr[y][x] - minResult) / (float) maxResult), 1, 1);
                 img.setRGB(x, y, rgb);
             }
         }
@@ -78,13 +80,22 @@ public class AFMImageReader {
         
         JFrame frame = new JFrame("Image!");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        final JLabel label = new JLabel(new ImageIcon(img));
-        label.addMouseMotionListener(new MouseMotionAdapter() {
+        JPanel allPanel = new JPanel(new BorderLayout());
+        JPanel infoPanel = new JPanel();
+        final JLabel heightLabel = new JLabel("x nm");
+        infoPanel.add(heightLabel);
+        allPanel.add(infoPanel, BorderLayout.NORTH);
+        
+        final JLabel imageLabel = new JLabel(new ImageIcon(img));
+        imageLabel.addMouseMotionListener(new MouseMotionAdapter() {
             public void mouseMoved(MouseEvent e) {
-                System.out.println(e.getX()+","+e.getY()+" = "+dataArr[e.getY()][e.getX()]);
+                int x = e.getX();
+                int y = e.getY();
+                heightLabel.setText(x+","+y+" = "+dataArr[y][x]+" nm");
             }
         });
-        label.addMouseListener(new MouseAdapter() {
+        
+        imageLabel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     double heightAtClick = dataArr[e.getY()][e.getX()];
@@ -100,12 +111,14 @@ public class AFMImageReader {
                             }
                         }
                     }
-                    label.repaint();
+                    imageLabel.repaint();
                     System.out.println("Above " + heightAtClick + " = " + count);
                 }
             }
         });
-        frame.add(label);
+        allPanel.add(imageLabel, BorderLayout.CENTER);
+        
+        frame.add(allPanel);
         frame.pack();
         frame.setVisible(true);
     }
