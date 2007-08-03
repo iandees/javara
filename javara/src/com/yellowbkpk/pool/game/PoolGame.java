@@ -9,6 +9,7 @@ import com.yellowbkpk.util.anim.DrawableIF;
 public class PoolGame implements ControllerIF {
 
     private List<DrawableIF> balls;
+    private long prevTime;
     
     public PoolGame() {
         balls = new ArrayList<DrawableIF>();
@@ -18,8 +19,17 @@ public class PoolGame implements ControllerIF {
         return balls;
     }
 
-    public void update() {
+    public synchronized void update() {
+        for (DrawableIF ball : balls) {
+            long delta = System.currentTimeMillis() - prevTime;
+            ball.step(delta);
+        }
         
+        prevTime = System.currentTimeMillis();
+    }
+
+    public synchronized void addBall(Ball ball) {
+        balls.add(ball);
     }
 
 }
