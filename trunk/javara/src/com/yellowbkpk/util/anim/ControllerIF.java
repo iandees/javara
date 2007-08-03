@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface ControllerIF {
 
-    public List<Drawable> getDrawables();
+    public List<DrawableIF> getDrawables();
 
     public void update();
 

@@ -11,6 +11,7 @@ import java.util.TimerTask;
 import javax.swing.JPanel;
 
 import com.yellowbkpk.jnova.client.game.JNovaController;
+import com.yellowbkpk.util.anim.AnimatedPanel;
 
 public class JNovaGUI extends JPanel implements Observer {
 
