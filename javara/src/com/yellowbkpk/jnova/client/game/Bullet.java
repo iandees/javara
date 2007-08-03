@@ -2,6 +2,8 @@ package com.yellowbkpk.jnova.client.game;
 
 import java.awt.Graphics;
 
+import com.yellowbkpk.util.vecmath.Vector2D;
+
 public class Bullet extends AbstractDrawable {
 
     private long age;
