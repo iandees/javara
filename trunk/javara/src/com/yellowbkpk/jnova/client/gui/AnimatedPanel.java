@@ -9,8 +9,8 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import com.yellowbkpk.jnova.client.game.Drawable;
 import com.yellowbkpk.jnova.client.game.JNovaController;
+import com.yellowbkpk.util.anim.Drawable;
 
 public class AnimatedPanel extends JPanel implements Runnable {
 

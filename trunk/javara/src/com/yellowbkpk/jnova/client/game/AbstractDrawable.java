@@ -1,6 +1,8 @@
 package com.yellowbkpk.jnova.client.game;
 
 import com.yellowbkpk.jnova.client.gui.AnimatedPanel;
+import com.yellowbkpk.util.anim.Drawable;
+import com.yellowbkpk.util.vecmath.Vector2D;
 
 
 

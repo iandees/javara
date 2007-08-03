@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.yellowbkpk.util.vecmath.Vector2D;
+
 public class Spaceship extends AbstractDrawable {
 
     private static final int SHIP_DIAM = 16;

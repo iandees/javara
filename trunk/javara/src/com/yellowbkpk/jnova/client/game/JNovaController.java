@@ -6,7 +6,11 @@ import java.util.List;
 import java.util.Observable;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class JNovaController extends Observable {
+import com.yellowbkpk.util.anim.ControllerIF;
+import com.yellowbkpk.util.anim.Drawable;
+import com.yellowbkpk.util.vecmath.Vector2D;
+
+public class JNovaController extends Observable implements ControllerIF {
 
     private static final Vector2D CENTER = new Vector2D(100f, 100f);
     private List<Drawable> drawables;

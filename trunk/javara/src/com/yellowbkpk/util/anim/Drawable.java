@@ -1,4 +1,4 @@
-package com.yellowbkpk.jnova.client.game;
+package com.yellowbkpk.util.anim;
 
 import java.awt.Graphics;
 
