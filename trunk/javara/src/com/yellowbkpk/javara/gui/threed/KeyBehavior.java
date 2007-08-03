@@ -43,13 +43,13 @@ public class KeyBehavior extends ViewPlatformBehavior {
     private static final Vector3d DOWN = new Vector3d(0, -MOVE_STEP, 0);
 
     // key names
-    private int forwardKey = KeyEvent.VK_UP;
+    private int forwardKey = KeyEvent.VK_W;
 
-    private int backKey = KeyEvent.VK_DOWN;
+    private int backKey = KeyEvent.VK_S;
 
-    private int leftKey = KeyEvent.VK_LEFT;
+    private int leftKey = KeyEvent.VK_A;
 
-    private int rightKey = KeyEvent.VK_RIGHT;
+    private int rightKey = KeyEvent.VK_D;
 
     private int fireKey = KeyEvent.VK_F; // fire button
 

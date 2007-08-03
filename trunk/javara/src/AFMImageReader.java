@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 public class AFMImageReader {
 
     private static final long OFFSET = 20480L;
-    private static final String PREFIX = "D:\\Documents and Settings\\212034767\\Desktop\\";
+    private static final String PREFIX = "H:\\d\\Downloads\\";
     private static final int FIELD_X = 512;
     private static final int FIELD_Y = 512;
     private static final double HARD_SCALE = 0.006713765; // V/LSB
