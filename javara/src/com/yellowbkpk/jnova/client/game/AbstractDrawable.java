@@ -1,12 +1,12 @@
 package com.yellowbkpk.jnova.client.game;
 
-import com.yellowbkpk.jnova.client.gui.AnimatedPanel;
-import com.yellowbkpk.util.anim.Drawable;
+import com.yellowbkpk.util.anim.AnimatedPanel;
+import com.yellowbkpk.util.anim.DrawableIF;
 import com.yellowbkpk.util.vecmath.Vector2D;
 
 
 
-public abstract class AbstractDrawable implements Drawable {
+public abstract class AbstractDrawable implements DrawableIF {
 
     private static final float DAMP = 0.97f;
     private static final float MAX_SPEED = 5;

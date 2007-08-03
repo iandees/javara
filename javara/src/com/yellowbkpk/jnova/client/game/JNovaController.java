@@ -7,13 +7,13 @@ import java.util.Observable;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.yellowbkpk.util.anim.ControllerIF;
-import com.yellowbkpk.util.anim.Drawable;
+import com.yellowbkpk.util.anim.DrawableIF;
 import com.yellowbkpk.util.vecmath.Vector2D;
 
 public class JNovaController extends Observable implements ControllerIF {
 
     private static final Vector2D CENTER = new Vector2D(100f, 100f);
-    private List<Drawable> drawables;
+    private List<DrawableIF> drawables;
     private Spaceship spaceship;
     private long prevTime;
     
@@ -21,7 +21,7 @@ public class JNovaController extends Observable implements ControllerIF {
     private ConcurrentLinkedQueue<ServerClientMessage> pipe;
     
     public JNovaController() {
-        drawables = new ArrayList<Drawable>();
+        drawables = new ArrayList<DrawableIF>();
         spaceship = new Spaceship(CENTER);
         drawables.add(spaceship);
         pipe = new ConcurrentLinkedQueue<ServerClientMessage>();
@@ -32,7 +32,7 @@ public class JNovaController extends Observable implements ControllerIF {
     }
 
     public synchronized void update() {
-        for (Drawable drawable : drawables) {
+        for (DrawableIF drawable : drawables) {
             long delta = System.currentTimeMillis() - prevTime;
             drawable.step(delta);
         }
@@ -40,7 +40,7 @@ public class JNovaController extends Observable implements ControllerIF {
         prevTime = System.currentTimeMillis();
     }
 
-    public List<Drawable> getDrawables() {
+    public List<DrawableIF> getDrawables() {
         return drawables;
     }
 

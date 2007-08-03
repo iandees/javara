@@ -1,4 +1,4 @@
-package com.yellowbkpk.jnova.client.gui;
+package com.yellowbkpk.util.anim;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -9,8 +9,6 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import com.yellowbkpk.util.anim.ControllerIF;
-import com.yellowbkpk.util.anim.Drawable;
 
 public class AnimatedPanel extends JPanel implements Runnable {
 
@@ -79,16 +77,16 @@ public class AnimatedPanel extends JPanel implements Runnable {
         
         dbg = dbImage.getGraphics();
 
-        dbg.setColor(Color.black);
+        dbg.setColor(Color.white);
         dbg.fillRect(0, 0, size.width, size.height);
         
         drawField(dbg);
     }
 
     private void drawField(Graphics dbg) {
-        List<Drawable> drawables = controller.getDrawables();
+        List<DrawableIF> drawables = controller.getDrawables();
         
-        for (Drawable drawable : drawables) {
+        for (DrawableIF drawable : drawables) {
             drawable.paint(dbg);
         }
     }

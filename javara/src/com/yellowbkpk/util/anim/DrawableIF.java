@@ -2,7 +2,7 @@ package com.yellowbkpk.util.anim;
 
 import java.awt.Graphics;
 
-public interface Drawable {
+public interface DrawableIF {
 
     void step(long delta);
 
