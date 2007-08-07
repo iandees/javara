@@ -6,14 +6,15 @@ import java.util.List;
 import java.util.Observable;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import com.yellowbkpk.util.anim.AbstractDrawable;
 import com.yellowbkpk.util.anim.ControllerIF;
 import com.yellowbkpk.util.anim.DrawableIF;
-import com.yellowbkpk.util.vecmath.Vector2D;
+import com.yellowbkpk.util.vecmath.Vector3D;
 
 public class JNovaController extends Observable implements ControllerIF {
 
-    private static final Vector2D CENTER = new Vector2D(100f, 100f);
-    private List<DrawableIF> drawables;
+    private static final Vector3D CENTER = new Vector3D(100f, 100f, 0f);
+    private List<AbstractDrawable> drawables;
     private Spaceship spaceship;
     private long prevTime;
     
@@ -21,7 +22,7 @@ public class JNovaController extends Observable implements ControllerIF {
     private ConcurrentLinkedQueue<ServerClientMessage> pipe;
     
     public JNovaController() {
-        drawables = new ArrayList<DrawableIF>();
+        drawables = new ArrayList<AbstractDrawable>();
         spaceship = new Spaceship(CENTER);
         drawables.add(spaceship);
         pipe = new ConcurrentLinkedQueue<ServerClientMessage>();
@@ -31,16 +32,13 @@ public class JNovaController extends Observable implements ControllerIF {
     public synchronized void addItem(Point point) {
     }
 
-    public synchronized void update() {
+    public synchronized void update(float delta) {
         for (DrawableIF drawable : drawables) {
-            long delta = System.currentTimeMillis() - prevTime;
             drawable.step(delta);
         }
-        
-        prevTime = System.currentTimeMillis();
     }
 
-    public List<DrawableIF> getDrawables() {
+    public List<AbstractDrawable> getDrawables() {
         return drawables;
     }
 
