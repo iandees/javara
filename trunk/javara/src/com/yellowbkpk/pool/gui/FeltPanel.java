@@ -8,7 +8,7 @@ import java.util.Random;
 import com.yellowbkpk.pool.game.Ball;
 import com.yellowbkpk.pool.game.PoolGame;
 import com.yellowbkpk.util.anim.AnimatedPanel;
-import com.yellowbkpk.util.vecmath.Vector2D;
+import com.yellowbkpk.util.vecmath.Vector3D;
 
 public class FeltPanel extends AnimatedPanel {
 
@@ -21,9 +21,9 @@ public class FeltPanel extends AnimatedPanel {
         
         addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                Vector2D loc = new Vector2D(e.getX(), e.getY());
-                Vector2D vel = new Vector2D(r.nextInt(4) - 2, r.nextInt(4) - 2);
-                Vector2D acc = new Vector2D(r.nextInt(4) - 2, r.nextInt(4) - 2);
+                Vector3D loc = new Vector3D(e.getX(), e.getY(), 0);
+                Vector3D vel = new Vector3D(r.nextInt(4) - 2, r.nextInt(4) - 2, 0);
+                Vector3D acc = new Vector3D(r.nextInt(4) - 2, r.nextInt(4) - 2, 0);
                 c.addBall(new Ball(loc, vel, acc, 5));
             }
         });

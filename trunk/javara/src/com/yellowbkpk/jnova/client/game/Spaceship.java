@@ -5,7 +5,9 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.yellowbkpk.util.anim.AbstractDrawable;
 import com.yellowbkpk.util.vecmath.Vector2D;
+import com.yellowbkpk.util.vecmath.Vector3D;
 
 public class Spaceship extends AbstractDrawable {
 
@@ -13,31 +15,31 @@ public class Spaceship extends AbstractDrawable {
     private static final int SHIP_RADIUS = SHIP_DIAM / 2;
     private final static float ROT_CONSTANT = 0.2f;
     private static final float ACC_CONSTANT = 0.2f;
-    private Vector2D shipAimDirection;
+    private Vector3D shipAimDirection;
     private List<Bullet> bullets;
     
-    public Spaceship(Vector2D initialLocation) {
+    public Spaceship(Vector3D initialLocation) {
         super(initialLocation);
         bullets = new ArrayList<Bullet>();
-        shipAimDirection = new Vector2D(1f, 0f);
+        shipAimDirection = new Vector3D(1, 0, 0);
     }
 
     public void rotateLeft() {
-        shipAimDirection = shipAimDirection.add(shipAimDirection.y*ROT_CONSTANT, -shipAimDirection.x*ROT_CONSTANT);
+        shipAimDirection = shipAimDirection.add(shipAimDirection.y*ROT_CONSTANT, -shipAimDirection.x*ROT_CONSTANT, 0);
         shipAimDirection.normalize();
     }
 
     public void accelerateForward() {
-        acceleration = acceleration.add(shipAimDirection.multiply(ACC_CONSTANT, ACC_CONSTANT));
+        acceleration = acceleration.add(shipAimDirection.multiply(ACC_CONSTANT, ACC_CONSTANT, 0));
     }
 
     public void rotateRight() {
-        shipAimDirection = shipAimDirection.add(-shipAimDirection.y*ROT_CONSTANT, shipAimDirection.x*ROT_CONSTANT);
+        shipAimDirection = shipAimDirection.add(-shipAimDirection.y*ROT_CONSTANT, shipAimDirection.x*ROT_CONSTANT, 0);
         shipAimDirection.normalize();
     }
 
     public void accelerateBackward() {
-        acceleration = acceleration.subtract(shipAimDirection.multiply(ACC_CONSTANT, ACC_CONSTANT));
+        acceleration = acceleration.subtract(shipAimDirection.multiply(ACC_CONSTANT, ACC_CONSTANT, 0));
     }
 
     public void paint(Graphics dbg) {
@@ -46,9 +48,9 @@ public class Spaceship extends AbstractDrawable {
         dbg.setColor(Color.red);
         dbg.drawLine((int) center.x, (int) center.y, (int) (center.x+(shipAimDirection.x*10)), (int) (center.y+(shipAimDirection.y*10)));
         dbg.setColor(Color.blue);
-        dbg.drawLine((int) center.x, (int) center.y, (int) (center.x+(velocity.x*10)), (int) (center.y+(velocity.y*10)));
+        dbg.drawLine((int) center.x, (int) center.y, (int) (center.x+(linearVelocity.x*10)), (int) (center.y+(linearVelocity.y*10)));
         dbg.setColor(Color.green);
-        dbg.drawLine((int) (center.x+(velocity.x*10)), (int) (center.y+(velocity.y*10)), (int) (center.x+(velocity.x*10)+(acceleration.x*10)), (int) (center.y+(velocity.y*10)+(acceleration.y*10)));
+        dbg.drawLine((int) (center.x+(linearVelocity.x*10)), (int) (center.y+(linearVelocity.y*10)), (int) (center.x+(linearVelocity.x*10)+(acceleration.x*10)), (int) (center.y+(linearVelocity.y*10)+(acceleration.y*10)));
         
         synchronized(bullets) {
         for (Bullet b : bullets) {
@@ -57,7 +59,7 @@ public class Spaceship extends AbstractDrawable {
         }
     }
 
-    public void setCenter(Vector2D newCenter) {
+    public void setCenter(Vector3D newCenter) {
         center = newCenter;
     }
 
@@ -69,7 +71,7 @@ public class Spaceship extends AbstractDrawable {
         }        
     }
 
-    public void step(long delta) {
+    public void step(float delta) {
         super.step(delta);
 
         synchronized (bullets) {

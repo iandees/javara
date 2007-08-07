@@ -4,7 +4,7 @@ import java.awt.Graphics;
 
 public interface DrawableIF {
 
-    void step(long delta);
+    void step(float delta);
 
     void paint(Graphics dbg);
 

@@ -24,11 +24,14 @@ public class AnimatedPanel extends JPanel implements Runnable {
 
     private ControllerIF controller;
 
+    private long prevTime;
+
     public static final long TIME_PER_FRAME = 10;
 
     public AnimatedPanel(ControllerIF c, Dimension dimension) {
         controller = c;
         size = dimension;
+        prevTime = System.currentTimeMillis();
         setPreferredSize(size);
     }
 
@@ -84,7 +87,7 @@ public class AnimatedPanel extends JPanel implements Runnable {
     }
 
     private void drawField(Graphics dbg) {
-        List<DrawableIF> drawables = controller.getDrawables();
+        List<? extends AbstractDrawable> drawables = controller.getDrawables();
         
         for (DrawableIF drawable : drawables) {
             drawable.paint(dbg);
@@ -96,7 +99,9 @@ public class AnimatedPanel extends JPanel implements Runnable {
     }
 
     private void gameUpdate() {
-        controller.update();
+        long deltaTime = System.currentTimeMillis() - prevTime;
+        controller.update(deltaTime / TIME_PER_FRAME);
+        prevTime = System.currentTimeMillis();
     }
 
 }

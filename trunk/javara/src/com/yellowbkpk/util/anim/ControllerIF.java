@@ -3,10 +3,11 @@ package com.yellowbkpk.util.anim;
 import java.util.List;
 
 
+
 public interface ControllerIF {
 
-    public List<DrawableIF> getDrawables();
+    public List<? extends AbstractDrawable> getDrawables();
 
-    public void update();
+    public void update(float deltaTime);
 
 }
