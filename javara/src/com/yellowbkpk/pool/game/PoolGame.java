@@ -227,10 +227,14 @@ public class PoolGame implements ControllerIF {
         for (Ball ball : balls) {
             if (ball.isMoving() && ball.isAlive()) {
                 // Translate balls
-                ball.setPosition(ball.getPosition().add(ball.getLinearVelocity().scale(timestep)));
+                ball.setPosition(ball.getPosition().add(ball.getLinearVelocity().scale(timestep / 8)));
                 
                 // TODO: Check for pocketed balls
                 // TODO: Add "remove from game" call here.
+                if (!(ball.getPosition().x >= 0 || ball.getPosition().x <= getWidth())
+                        && !(ball.getPosition().y >= 0 || ball.getPosition().y <= getHeight())) {
+                    ball.setIsDead();
+                }
             }
         }
     }

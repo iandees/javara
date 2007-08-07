@@ -109,4 +109,8 @@ public class Ball extends AbstractDrawable {
         movement = MV_SLIDING;
     }
 
+    public void setIsDead() {
+        inGame = false;
+    }
+
 }
