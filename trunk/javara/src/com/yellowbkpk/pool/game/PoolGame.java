@@ -30,7 +30,7 @@ public class PoolGame implements ControllerIF {
     
     private List<Ball> balls;
     private long prevTime;
-    private int demoStage = 1;
+    private int demoStage = 0;
     
     public PoolGame() {
         balls = new ArrayList<Ball>();
@@ -101,7 +101,7 @@ public class PoolGame implements ControllerIF {
                     float vp2Par = dot(vp2, diff(vp,vp2));
                     
                     // Check to see if it should start to roll
-                    if((vpPar > 0.0f && vp2Par < 0.0f) || (vp2Par > 0.0f && vpPar < 0.0f)) {
+                    if((vpPar > -2.0f && vp2Par < 2.0f) || (vp2Par > -2.0f && vpPar < 2.0f)) {
                         // Align linear velocity with angular velocity
                         ball.setLinearVelocity(cross(ball.getAngularVelocity(), new Vector3D(0,0,radius)));
                         ball.setIsRolling();

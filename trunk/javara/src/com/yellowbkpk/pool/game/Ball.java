@@ -43,8 +43,16 @@ public class Ball extends AbstractDrawable {
     }
 
     public void paint(Graphics dbg) {
-        dbg.setColor(Color.black);
+        if (isSliding()) {
+            dbg.setColor(Color.orange);
+        } else if(isRolling()) {
+            dbg.setColor(Color.red);
+        }
         dbg.fillOval((int) center.x - radius, (int) center.y - radius, diam, diam);
+    }
+
+    public boolean isRolling() {
+        return movement == MV_ROLLING;
     }
 
     public void step(float delta) {
