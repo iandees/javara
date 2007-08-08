@@ -26,7 +26,7 @@ public class AnimatedPanel extends JPanel implements Runnable {
 
     private long prevTime;
 
-    public static final long TIME_PER_FRAME = 10;
+    public static final long TIME_PER_FRAME = 50;
 
     public AnimatedPanel(ControllerIF c, Dimension dimension) {
         controller = c;
@@ -100,7 +100,7 @@ public class AnimatedPanel extends JPanel implements Runnable {
 
     private void gameUpdate() {
         long deltaTime = System.currentTimeMillis() - prevTime;
-        controller.update(deltaTime / TIME_PER_FRAME);
+        controller.update(deltaTime / 1000f);
         prevTime = System.currentTimeMillis();
     }
 
