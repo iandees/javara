@@ -44,7 +44,7 @@ public class Ball extends AbstractDrawable {
 
     public void paint(Graphics dbg) {
         dbg.setColor(Color.black);
-        dbg.drawOval((int) center.x - radius, (int) center.y - radius, diam, diam);
+        dbg.fillOval((int) center.x - radius, (int) center.y - radius, diam, diam);
     }
 
     public void step(float delta) {
