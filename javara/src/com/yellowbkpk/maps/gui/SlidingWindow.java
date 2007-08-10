@@ -55,7 +55,7 @@ public class SlidingWindow {
         northwest = new GLatLng(nwLat, nwLng);
         southeast = new GLatLng(seLat, seLng);
     }
-    
+
     public GLatLng getNorthwest() {
         return northwest;
     }

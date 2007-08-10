@@ -38,6 +38,7 @@ public class MapDisplayPanel extends JPanel implements Runnable {
     private SlidingWindow mapSlidingWindow;
     private ImageCache imageCache;
     private Image loadingTileImage;
+    private boolean needsUpdate = false;;
 
     public MapDisplayPanel(Map m) {
         setPreferredSize(new Dimension(800,600));
@@ -57,6 +58,7 @@ public class MapDisplayPanel extends JPanel implements Runnable {
                 originalPixelCenter = mapSlidingWindow.getGlobalPixelCenter();
                 
                 if(e.getClickCount() == 2) {
+                    needsUpdate = true;
                     mapSlidingWindow.zoomIn();
                 }
             }
@@ -71,6 +73,7 @@ public class MapDisplayPanel extends JPanel implements Runnable {
                 Point newPixelCenter = new Point(newPixelCenterX, newPixelCenterY);
                 
                 mapSlidingWindow.setPixelCenter(newPixelCenter);
+                needsUpdate = true;
             }
         });
         
@@ -78,6 +81,7 @@ public class MapDisplayPanel extends JPanel implements Runnable {
             public void componentResized(ComponentEvent e) {
                 dbImage = createImage(getSize());
                 mapSlidingWindow.resize(getSize());
+                needsUpdate = true;
             }
         });
         
@@ -97,6 +101,7 @@ public class MapDisplayPanel extends JPanel implements Runnable {
 							+ panVelocity, center.getLongitude());
 
 					mapSlidingWindow.setCenter(newCenter);
+                    needsUpdate = true;
 				} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 					panVelocity += 0.2;
 
@@ -109,6 +114,7 @@ public class MapDisplayPanel extends JPanel implements Runnable {
 							- panVelocity, center.getLongitude());
 
 					mapSlidingWindow.setCenter(newCenter);
+                    needsUpdate = true;
 				} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 					panVelocity += 0.2;
 
@@ -121,6 +127,7 @@ public class MapDisplayPanel extends JPanel implements Runnable {
 							, center.getLongitude() - panVelocity);
 
 					mapSlidingWindow.setCenter(newCenter);
+                    needsUpdate = true;
 				} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 					panVelocity += 0.2;
 
@@ -133,10 +140,13 @@ public class MapDisplayPanel extends JPanel implements Runnable {
 							, center.getLongitude() + panVelocity);
 
 					mapSlidingWindow.setCenter(newCenter);
+                    needsUpdate = true;
 				} else if (e.getKeyCode() == KeyEvent.VK_EQUALS) {
 					mapSlidingWindow.zoomIn();
+                    needsUpdate = true;
 				} else if (e.getKeyCode() == KeyEvent.VK_MINUS) {
 					mapSlidingWindow.zoomOut();
+                    needsUpdate = true;
 				}
 			}
 
@@ -158,6 +168,7 @@ public class MapDisplayPanel extends JPanel implements Runnable {
         if (animator == null || !running) {
             animator = new Thread(this);
             animator.start();
+            needsUpdate = true;
         }
     }
 
@@ -201,7 +212,10 @@ public class MapDisplayPanel extends JPanel implements Runnable {
     }
 
     private void drawField(Graphics dbg2) {
-
+            if(!needsUpdate) {
+                return;
+            }
+        
             dbg2.setColor(Color.white);
             final int zoomLevel = (17-mapSlidingWindow.getZoom());
         
