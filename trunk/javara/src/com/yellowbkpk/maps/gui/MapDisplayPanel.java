@@ -45,12 +45,7 @@ public class MapDisplayPanel extends JPanel implements Runnable {
         setFocusable(true);
         
         map = m;
-        loadingTileImage = new BufferedImage(TILE_SIZE, TILE_SIZE, BufferedImage.TYPE_INT_RGB);
-        Graphics graphics = loadingTileImage.getGraphics();
-        graphics.setColor(Color.gray);
-        graphics.drawString("Loading...", 120, 128);
-        imageCache = new ImageCache();
-        mapSlidingWindow = new SlidingWindow(map, DEFAULT_CENTER, SIZE, DEFAULT_ZOOM);
+        mapSlidingWindow = new SlidingWindow(DEFAULT_CENTER, SIZE, DEFAULT_ZOOM);
         
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
@@ -59,7 +54,8 @@ public class MapDisplayPanel extends JPanel implements Runnable {
                 
                 if(e.getClickCount() == 2) {
                     needsUpdate = true;
-                    mapSlidingWindow.zoomIn();
+                    //mapSlidingWindow.zoomIn();
+                    map.zoomIn();
                 }
             }
         });
@@ -187,7 +183,6 @@ public class MapDisplayPanel extends JPanel implements Runnable {
         running = true;
 
         while (running) {
-            mapUpdate();
             mapRender();
             repaint();
 
@@ -216,59 +211,11 @@ public class MapDisplayPanel extends JPanel implements Runnable {
                 return;
             }
         
-            dbg2.setColor(Color.white);
-            final int zoomLevel = (17-mapSlidingWindow.getZoom());
-        
-            // Get the northwest corner tile x and y coordinates
-            int nwXPixels = GoogleMapUtilities.lngToX(mapSlidingWindow.getNorthwest().getLongitude(), zoomLevel);
-            int nwYPixels = GoogleMapUtilities.latToY(mapSlidingWindow.getNorthwest().getLatitude(), zoomLevel);
-            
-            // Get the southeast corner tile x and y coordinates
-            int seXPixels = GoogleMapUtilities.lngToX(mapSlidingWindow.getSoutheast().getLongitude(), zoomLevel);
-            int seYPixels = GoogleMapUtilities.latToY(mapSlidingWindow.getSoutheast().getLatitude(), zoomLevel);
-            
-            // Get the northwest tile number
-            //Point nwTile = GoogleMapUtilities.getTileCoordinate(mapSlidingWindow.getNorthwest().getLatitude(), mapSlidingWindow.getNorthwest().getLongitude(), zoomLevel);
-            int nwTileX = GoogleMapUtilities.xToTileX(nwXPixels);
-            int nwTileY = GoogleMapUtilities.yToTileY(nwYPixels);
-            
-            // Get the southeast tile number
-            //Point seTile = GoogleMapUtilities.getTileCoordinate(mapSlidingWindow.getSoutheast().getLatitude(), mapSlidingWindow.getSoutheast().getLongitude(), zoomLevel);
-            int seTileX = GoogleMapUtilities.xToTileX(seXPixels);
-            int seTileY = GoogleMapUtilities.yToTileY(seYPixels);
-
-            // Loop from northwest to southeast and draw the tiles
-            for(int x = nwTileX; x <= seTileX; x++) {
-                for(int y = nwTileY; y <= seTileY; y++) {
-                    // Convert the tile x,y to global-pixel coordinates
-                    int tilePixelX = GoogleMapUtilities.tileXToX(x);
-                    int tilePixelY = GoogleMapUtilities.tileYToY(y);
-                    
-                    // Convert the global-pixel coordinates to local-pixel coordinates
-                    int localTilePixelX = tilePixelX - nwXPixels;
-                    int localTilePixelY = tilePixelY - nwYPixels;
-                    
-                    // Fetch the image
-                    Image image = imageCache.get(x,y,zoomLevel);
-                    
-                    if(image == null) {
-                        image = loadingTileImage;
-                    }
-                    
-                    dbg2.drawImage(image, localTilePixelX, localTilePixelY, this);
-                    
-                    //dbg2.drawRect(localTilePixelX, localTilePixelY, 256, 256);
-                    //dbg2.drawString("("+x+","+y+")", localTilePixelX+1, localTilePixelY+11);
-                }
-            }
+            map.drawAll(mapSlidingWindow, dbg2, this);
             
     }
 
     private Image createImage(Dimension size) {
         return new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_RGB);
-    }
-
-    private void mapUpdate() {
-        map.update();
     }
 }
