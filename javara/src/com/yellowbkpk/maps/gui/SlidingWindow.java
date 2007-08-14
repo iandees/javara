@@ -11,8 +11,6 @@ public class SlidingWindow {
     private static final int MIN_ZOOM = 0;
     private static final int MAX_ZOOM = 16;
     
-    private Map map;
-
     private int zoom;
     
     private GLatLng center;
@@ -21,8 +19,7 @@ public class SlidingWindow {
     private GLatLng southeast;
     private Point pixelCenter;
 
-    public SlidingWindow(Map m, GLatLng cent, Dimension size, int z) {
-        map = m;
+    public SlidingWindow(GLatLng cent, Dimension size, int z) {
         center = cent;
         zoom = z;
         pixelSize = size;
