@@ -3,7 +3,6 @@ package com.yellowbkpk.maps;
 import java.awt.Graphics;
 import java.awt.Point;
 
-import com.yellowbkpk.maps.map.GLatLng;
 
 /**
  * @author Ian Dees
@@ -14,7 +13,7 @@ public interface GOverlay {
     /**
      * @return
      */
-    GLatLng getLocation();
+    boolean shouldDraw(GLatLngBounds view);
 
     /**
      * @param dbg2

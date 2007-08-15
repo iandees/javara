@@ -16,6 +16,7 @@ public class GMarker implements GOverlay {
     private static final int WIDTH = 10;
     private static final int HEIGHT = 10;
     private GLatLng myPoint;
+    private GLatLngBounds myBounds;
     private Color color;
 
     /**
@@ -23,11 +24,12 @@ public class GMarker implements GOverlay {
      */
     public GMarker(GLatLng point) {
         myPoint = point;
+        myBounds = new GLatLngBounds(myPoint, myPoint);
         color = Color.black;
     }
 
-    public GLatLng getLocation() {
-        return myPoint;
+    public boolean shouldDraw(GLatLngBounds viewBounds) {
+        return viewBounds.contains(myBounds);
     }
 
     public void drawOverlay(Graphics dbg2, Point nwPoint, int zoom, GLatLngBounds viewBounds) {
@@ -42,6 +44,7 @@ public class GMarker implements GOverlay {
      */
     public void setCenter(GLatLng latLng) {
         myPoint = latLng;
+        myBounds = new GLatLngBounds(myPoint, myPoint);
     }
 
 }

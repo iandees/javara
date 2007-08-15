@@ -1,5 +1,10 @@
 package com.yellowbkpk.maps;
 
+import java.awt.Color;
+import java.awt.Container;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.yellowbkpk.maps.gui.MapDisplayFrame;
 import com.yellowbkpk.maps.gui.MapDisplayPanel;
 import com.yellowbkpk.maps.map.GLatLng;
@@ -19,6 +24,10 @@ public class MapsMain {
         final GMarker dot = new GMarker(dotLatLng);
         map.addOverlay(dot);
         
+        final List<GLatLng> linePoints = new ArrayList<GLatLng>();
+        final GPolyline line = new GPolyline(linePoints, Color.red, 5);
+        map.addOverlay(line);
+        
         /*GPSReader gps = null;
         try {
             gps = new GPSReader("COM9");
@@ -34,8 +43,10 @@ public class MapsMain {
         });*/
 
         panel.addMapMouseListener(new MapMouseListener() {
+
             public void mouseClicked(GLatLng latLng, int clickCount) {
                 dot.setCenter(latLng);
+                linePoints.add(latLng);
             }
         });
     }

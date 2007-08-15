@@ -22,4 +22,12 @@ public class GLatLng {
         return "("+latitude+","+longitude+")";
     }
 
+    public void setLatitude(double lat) {
+        latitude = lat;
+    }
+    
+    public void setLongitude(double lng) {
+        longitude = lng;
+    }
+
 }
