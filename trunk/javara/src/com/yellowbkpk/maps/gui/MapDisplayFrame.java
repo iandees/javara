@@ -2,14 +2,17 @@ package com.yellowbkpk.maps.gui;
 
 import javax.swing.JFrame;
 
-import com.yellowbkpk.maps.map.Map;
-
 public class MapDisplayFrame extends JFrame {
 
-    public MapDisplayFrame(Map m) {
+    private MapDisplayPanel panel;
+
+    /**
+     * @param panel2
+     */
+    public MapDisplayFrame(MapDisplayPanel mapPanel) {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        MapDisplayPanel panel = new MapDisplayPanel(m);
+        panel = mapPanel;
         setContentPane(panel);
         
         pack();

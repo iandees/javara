@@ -3,8 +3,8 @@ package com.yellowbkpk.maps.gui;
 import java.awt.Dimension;
 import java.awt.Point;
 
+import com.yellowbkpk.maps.GLatLngBounds;
 import com.yellowbkpk.maps.map.GLatLng;
-import com.yellowbkpk.maps.map.Map;
 
 public class SlidingWindow {
 
@@ -18,10 +18,12 @@ public class SlidingWindow {
     private Dimension pixelSize;
     private GLatLng southeast;
     private Point pixelCenter;
+    private Point nw;
+    private Point se;
+    private GLatLngBounds bounds;
 
-    public SlidingWindow(GLatLng cent, Dimension size, int z) {
-        center = cent;
-        zoom = z;
+    public SlidingWindow(GLatLng llCenter, Dimension size) {
+        center = llCenter;
         pixelSize = size;
         
         updateWindow();
@@ -36,10 +38,12 @@ public class SlidingWindow {
         // Determine the northwest pixel coordinates
         int nwX = centerX - (pixelSize.width / 2);
         int nwY = centerY - (pixelSize.height / 2);
+        nw = new Point(nwX, nwY);
         
         // Determine the southeast pixel coordinates
         int seX = centerX + (pixelSize.width / 2);
         int seY = centerY + (pixelSize.height / 2);
+        se = new Point(seX, seY);
         
         // Convert the northwest pixel coordinates back to lat/lng
         double nwLat = GoogleMapUtilities.yToLat(nwY, 17-zoom);
@@ -51,8 +55,9 @@ public class SlidingWindow {
         
         northwest = new GLatLng(nwLat, nwLng);
         southeast = new GLatLng(seLat, seLng);
+        bounds = new GLatLngBounds(northwest, southeast);
     }
-
+    
     public GLatLng getNorthwest() {
         return northwest;
     }
@@ -151,6 +156,27 @@ public class SlidingWindow {
         pixelSize = size;
         
         updateWindow();
+    }
+
+    /**
+     * @return
+     */
+    public Point getNorthwestPoint() {
+        return nw;
+    }
+
+    /**
+     * @return
+     */
+    public Point getSoutheastPoint() {
+        return se;
+    }
+
+    /**
+     * @return
+     */
+    public GLatLngBounds getGBounds() {
+        return bounds;
     }
 
 }

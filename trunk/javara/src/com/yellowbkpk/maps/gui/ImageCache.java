@@ -5,18 +5,15 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageOutputStream;
 import javax.swing.ImageIcon;
 
 public class ImageCache {
@@ -26,8 +23,9 @@ public class ImageCache {
     private static final int MAX_CACHE_SIZE = 128;
     ConcurrentHashMap<String, Image> cacheMap;
     Map<String, Thread> imgFetchers;
-    private String baseURL = "http://mt3.google.com/mt?n=404&v=w2.56&";
+    private String baseURL = "http://mt3.google.com/mt?n=404&v=w2.60&";
     private BufferedImage noImageTile;
+    private static final boolean NETWORK_ACCESS_ENABLED = true;
     
     public ImageCache() {
         noImageTile = new BufferedImage(TILE_SIZE, TILE_SIZE, BufferedImage.TYPE_INT_RGB);
@@ -88,6 +86,11 @@ public class ImageCache {
                     return null;
                 }
             } else {
+                // If network access is turned on
+                if(!NETWORK_ACCESS_ENABLED) {
+                    return noImageTile;
+                }
+                
                 // If the image is not already being fetched
                 Thread thread = imgFetchers.get(url);
                 if (thread == null) {
@@ -119,6 +122,7 @@ public class ImageCache {
                                 }
                             } else {
                                 System.err.println("Could not load " + u + " code was " + i.getImageLoadStatus());
+                                cacheMap.put(url, noImageTile);
                             }
 
                             imgFetchers.remove(url);
