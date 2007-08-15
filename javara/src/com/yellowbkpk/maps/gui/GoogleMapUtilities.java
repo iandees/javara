@@ -26,15 +26,15 @@ public final class GoogleMapUtilities {
     static {
 
         int c = GOOG_PIXELS;
-        for (int d = NUM_ZOOM_LEVELS; d >= 0; --d) {
+        for (int d = NUM_ZOOM_LEVELS; d >= 0; d--) {
             PIXELS_PER_LON_DEGREE[d] = c / 360.0;
             PIXELS_PER_LON_RADIAN[d] = c / TWO_PI;
             int e = c / 2;
             BITMAP_ORIGIN[d] = new Point(e, e);
             NUM_TILES[d] = c / GOOG_PIXELS;
-            c *= 2.0;
+            c *= 2;
         }
-
+        System.out.println("");
     }
     
     public static Point getBitmapCoordinate(double latitude,
