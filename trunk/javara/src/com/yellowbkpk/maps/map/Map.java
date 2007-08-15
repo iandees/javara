@@ -32,7 +32,7 @@ public class Map {
         Collection<GOverlay> ov = new ArrayList<GOverlay>();
         
         for (GOverlay overlay : overlays) {
-            if(bounds.contains(overlay.getLocation())) {
+            if(overlay.shouldDraw(bounds)) {
                 ov.add(overlay);
             }
         }
