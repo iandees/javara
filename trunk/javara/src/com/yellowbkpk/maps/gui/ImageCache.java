@@ -61,6 +61,7 @@ public class ImageCache {
 
         final String url = baseURL + "x=" + correctedX + "&y=" + y + "&zoom=" + zoom;
 
+        
         Image image = cacheMap.get(url);
         // If the image was not in memory cache
         if (image == null) {
@@ -73,9 +74,16 @@ public class ImageCache {
                 if (thread == null) {
                     Thread imgFetcher = new Thread(new Runnable() {
                         public void run() {
-                            Image image = new ImageIcon(file.getPath()).getImage();
+                            Image image = null;
+                            try {
+                                image = ImageIO.read(new File(file.getPath()));
+                            } catch (IOException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            }
                             cacheMap.put(url, image);
                             imgFetchers.remove(url);
+                            
                         }
                     });
                     imgFetchers.put(url, imgFetcher);

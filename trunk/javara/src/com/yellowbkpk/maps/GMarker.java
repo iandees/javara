@@ -1,8 +1,9 @@
 package com.yellowbkpk.maps;
 
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.image.ImageObserver;
 
 import com.yellowbkpk.maps.gui.GoogleMapUtilities;
 import com.yellowbkpk.maps.map.GLatLng;
@@ -32,7 +33,7 @@ public class GMarker implements GOverlay {
         return viewBounds.contains(myBounds);
     }
 
-    public void drawOverlay(Graphics dbg2, Point nwPoint, int zoom, GLatLngBounds viewBounds) {
+    public void drawOverlay(Graphics2D dbg2, Point nwPoint, int zoom, GLatLngBounds viewBounds, ImageObserver imageObserver) {
         dbg2.setColor(color);
         int x = GoogleMapUtilities.lngToX(myPoint.getLongitude(), 17-zoom) - nwPoint.x;
         int y = GoogleMapUtilities.latToY(myPoint.getLatitude(), 17-zoom) - nwPoint.y;
