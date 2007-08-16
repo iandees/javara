@@ -1,7 +1,8 @@
 package com.yellowbkpk.maps;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.image.ImageObserver;
 
 
 /**
@@ -18,8 +19,9 @@ public interface GOverlay {
     /**
      * @param dbg2
      * @param nwPoint 
+     * @param imageObserver TODO
      * @param bounds
      */
-    void drawOverlay(Graphics dbg2, Point nwPoint, int zoom, GLatLngBounds viewBounds);
+    void drawOverlay(Graphics2D dbg2, Point nwPoint, int zoom, GLatLngBounds viewBounds, ImageObserver imageObserver);
 
 }
