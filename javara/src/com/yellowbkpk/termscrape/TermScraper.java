@@ -96,7 +96,12 @@ public class TermScraper {
                     Node aTag = a.getChildNodes().item(1);
                     String catalogURL = aTag.getAttributes().getNamedItem("href").getNodeValue();
                     String sectionNumber = aTag.getChildNodes().item(0).getNodeValue();
-                    theSection.setSectionNumber(sectionNumber);
+                    
+                    String sectionSuffix = "";
+                    if(a.getChildNodes().item(2) != null) {
+                        sectionSuffix = a.getChildNodes().item(2).getNodeValue();
+                    }
+                    theSection.setSectionNumber(sectionNumber + sectionSuffix);
                     theSection.setCatalogURL(catalogURL);
                 } else {
                     theSection.setSectionNumber("");
