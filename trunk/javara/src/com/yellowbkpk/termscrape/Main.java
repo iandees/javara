@@ -104,6 +104,73 @@ public class Main {
                 } else {
                     theSection.setDivision(null);
                 }
+                
+                // prerequisite
+                a = classdata.item(5);
+                if(a.getNodeName().equals("td") && a.hasChildNodes()) {
+                    String data = a.getChildNodes().item(0).getNodeValue();
+                    
+                    theSection.setCredits(data);
+                    System.out.println("    Prerequisites: " + data);
+                } else {
+                    theSection.setCredits(null);
+                }
+                
+                // course title
+                a = classdata.item(6);
+                if(a.getNodeName().equals("td") && a.hasChildNodes()) {
+                    String data = a.getChildNodes().item(0).getNodeValue();
+                    
+                    theSection.setCredits(data);
+                    System.out.println("    Course Title: " + data);
+                } else {
+                    theSection.setCredits(null);
+                }
+                
+                // faculty member
+                a = classdata.item(7);
+                if(a.getNodeName().equals("td") && a.hasChildNodes()) {
+                    String data = a.getChildNodes().item(0).getNodeValue();
+                    
+                    theSection.setCredits(data);
+                    System.out.println("    Faculty: " + data);
+                } else {
+                    theSection.setCredits(null);
+                }
+                
+                // enrollment
+                a = classdata.item(8);
+                if(a.getNodeName().equals("td") && a.hasChildNodes()) {
+                    String data = a.getChildNodes().item(0).getNodeValue();
+                    
+                    theSection.setCredits(data);
+                    System.out.println("    Enroll: " + data);
+                } else {
+                    theSection.setCredits(null);
+                }
+                
+                // capacity
+                a = classdata.item(9);
+                if(a.getNodeName().equals("td") && a.hasChildNodes()) {
+                    String data = a.getChildNodes().item(0).getNodeValue();
+                    
+                    theSection.setCredits(data);
+                    System.out.println("    Cap: " + data);
+                } else {
+                    theSection.setCredits(null);
+                }
+                
+                // room
+                a = classdata.item(10);
+                if(a.getNodeName().equals("td") && a.hasChildNodes()) {
+                    String data = a.getChildNodes().item(0).getNodeValue();
+                    
+                    theSection.setCredits(data);
+                    System.out.println("    Room: " + data);
+                } else {
+                    theSection.setCredits(null);
+                }
+                
                 System.out.println(a.getNodeName());
             }
 
