@@ -1,9 +1,3 @@
-/*
- * RadarMap.java
- *
- * Copyright 2007 General Electric Company. All Rights Reserved.
- */
-
 package com.yellowbkpk.maps;
 
 import java.io.BufferedReader;

@@ -1,9 +1,3 @@
-/*
- * Ticker.java
- *
- * Copyright 2007 General Electric Company. All Rights Reserved.
- */
-
 package com.yellowbkpk.tetris;
 
 import java.util.TimerTask;
