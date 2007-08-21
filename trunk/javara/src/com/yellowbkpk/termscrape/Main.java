@@ -27,8 +27,8 @@ public class Main {
             NodeList childNodes = parseDOM.getElementsByTagName("table").item(7).getChildNodes();
             // Each row in the term table
             for(int i = 0; i < childNodes.getLength(); i++) {
-                System.out.print(i + " ");
                 Node item = childNodes.item(i);
+                /*System.out.print(i + " ");
                 if (item.getNodeType() > 1) {
                     System.out.println(item.getNodeName() + " " + item.getNodeValue());
                 } else {
@@ -40,11 +40,10 @@ public class Main {
                 for(int j = 0; j < attributes.getLength(); j++) {
                     System.out.print(attributes.item(j).getNodeName() + " = " + attributes.item(j).getNodeValue() + " ");
                 }
-                System.out.println();
+                System.out.println();*/
                 
                 Section theSection = new Section();
                 NodeList classdata = item.getChildNodes();
-                System.out.println("   Num data elements in this row: " + classdata.getLength());
                 // First year only or not
                 Node a = classdata.item(0);
                 if(a.getNodeName().equals("td") && a.hasChildNodes() && a.getChildNodes().item(0).getNodeValue().equals("*")) {
@@ -107,11 +106,12 @@ public class Main {
                 
                 // prerequisite
                 a = classdata.item(5);
-                if(a.getNodeName().equals("td") && a.hasChildNodes()) {
-                    String data = a.getChildNodes().item(0).getNodeValue();
+                if(a.getNodeName().equals("td") && a.hasChildNodes() && a.getChildNodes().item(0).getChildNodes().item(0).getNodeName().equals("a") && (a.getChildNodes().item(0).getChildNodes().item(0) != null)) {
+                    String data = a.getChildNodes().item(0).getChildNodes().item(0).getAttributes().item(0).getNodeValue();
+                    data = data.substring(23, data.length()-7);
                     
                     theSection.setPrerequisites(data);
-                    System.out.println("    Prerequisites: " + data);
+                    System.out.println("    Prerequisites URL: " + data);
                 } else {
                     theSection.setPrerequisites(null);
                 }
@@ -171,7 +171,6 @@ public class Main {
                     theSection.setRoom(null);
                 }
                 
-                System.out.println(a.getNodeName());
             }
 
         } catch (FileNotFoundException e) {
