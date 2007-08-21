@@ -67,7 +67,7 @@ public class TermScraper {
                 if (a.getNodeName().equals("td") && a.hasChildNodes()
                         && a.getChildNodes().item(0).getNodeValue().equals("*")) {
                     theSection.setFirstYearOnly(true);
-                    System.out.println("    This is a FYO class");
+                    System.out.println("This is a FYO class");
                 } else {
                     theSection.setFirstYearOnly(false);
                 }
@@ -77,9 +77,9 @@ public class TermScraper {
                 if (a.getNodeName().equals("td") && a.hasChildNodes()) {
                     String data = a.getChildNodes().item(0).getNodeValue();
                     theSection.setDepartment(data);
-                    System.out.println("    Department: " + data);
+                    System.out.println("Department: " + data);
                 } else {
-                    theSection.setDepartment(null);
+                    theSection.setDepartment("");
                 }
 
                 // block and section
@@ -89,7 +89,7 @@ public class TermScraper {
                     Integer block = Integer.parseInt(data.substring(0, 1));
 
                     theSection.setBlock(block);
-                    System.out.println("    Block: " + block);
+                    System.out.println("Block: " + block);
 
                     Node aTag = a.getChildNodes().item(1);
                     String catalogURL = aTag.getAttributes().getNamedItem("href").getNodeValue();
@@ -97,8 +97,8 @@ public class TermScraper {
                     theSection.setSectionNumber(sectionNumber);
                     theSection.setCatalogURL(catalogURL);
                 } else {
-                    theSection.setSectionNumber(null);
-                    theSection.setCatalogURL(null);
+                    theSection.setSectionNumber("");
+                    theSection.setCatalogURL("");
                 }
 
                 // credits
@@ -107,9 +107,9 @@ public class TermScraper {
                     String data = a.getChildNodes().item(0).getNodeValue();
 
                     theSection.setCredits(data);
-                    System.out.println("    Credits: " + data);
+                    System.out.println("Credits: " + data);
                 } else {
-                    theSection.setCredits(null);
+                    theSection.setCredits("");
                 }
 
                 // division
@@ -120,9 +120,9 @@ public class TermScraper {
                     String data = a.getChildNodes().item(0).getChildNodes().item(0).getNodeValue();
 
                     theSection.setDivision(data);
-                    System.out.println("    Division: " + data);
+                    System.out.println("Division: " + data);
                 } else {
-                    theSection.setDivision(null);
+                    theSection.setDivision("");
                 }
 
                 // prerequisite
@@ -135,9 +135,9 @@ public class TermScraper {
                     data = data.substring(23, data.length() - 7);
 
                     theSection.setPrerequisites(data);
-                    System.out.println("    Prerequisites URL: " + data);
+                    System.out.println("Prerequisites URL: " + data);
                 } else {
-                    theSection.setPrerequisites(null);
+                    theSection.setPrerequisites("");
                 }
 
                 // course title
@@ -146,9 +146,9 @@ public class TermScraper {
                     String data = a.getChildNodes().item(0).getNodeValue();
 
                     theSection.setTitle(data);
-                    System.out.println("    Course Title: " + data);
+                    System.out.println("Course Title: " + data);
                 } else {
-                    theSection.setTitle(null);
+                    theSection.setTitle("");
                 }
 
                 // faculty member
@@ -157,9 +157,9 @@ public class TermScraper {
                     String data = a.getChildNodes().item(0).getNodeValue();
 
                     theSection.setFacultyMember(data);
-                    System.out.println("    Faculty: " + data);
+                    System.out.println("Faculty: " + data);
                 } else {
-                    theSection.setFacultyMember(null);
+                    theSection.setFacultyMember("");
                 }
 
                 // enrollment
@@ -168,9 +168,9 @@ public class TermScraper {
                     String data = a.getChildNodes().item(0).getNodeValue();
 
                     theSection.setEnrollment(data);
-                    System.out.println("    Enroll: " + data);
+                    System.out.println("Enroll: " + data);
                 } else {
-                    theSection.setEnrollment(null);
+                    theSection.setEnrollment("");
                 }
 
                 // capacity
@@ -179,9 +179,9 @@ public class TermScraper {
                     String data = a.getChildNodes().item(0).getNodeValue();
 
                     theSection.setCapacity(data);
-                    System.out.println("    Cap: " + data);
+                    System.out.println("Cap: " + data);
                 } else {
-                    theSection.setCapacity(null);
+                    theSection.setCapacity("");
                 }
 
                 // room
@@ -195,18 +195,19 @@ public class TermScraper {
                         theSection.setBuilding(strings[0]);
                         theSection.setRoomnumber(strings[1]);
                     } else {
-                        theSection.setBuilding(null);
+                        theSection.setBuilding("");
                         theSection.setRoomnumber(strings[0]);
                     }
 
-                    System.out.println("    Building: " + strings[0]);
-                    System.out.println("    Room: " + strings[1]);
+                    System.out.println("Building: " + strings[0]);
+                    System.out.println("Room: " + strings[1]);
                 } else {
-                    theSection.setRoomnumber(null);
-                    theSection.setBuilding(null);
+                    theSection.setRoomnumber("");
+                    theSection.setBuilding("");
                 }
                 
                 output.addSection(theSection);
+                System.out.println("=== Added section ===");
 
             }
         } catch (MalformedURLException e) {
