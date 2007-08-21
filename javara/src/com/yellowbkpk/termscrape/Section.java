@@ -18,6 +18,12 @@ public class Section {
     private String catalogURL;
     private String credits;
     private String division;
+    private String prereqs;
+    private String title;
+    private String faculty;
+    private String enrollment;
+    private String capacity;
+    private String room;
 
     /**
      * @param b
@@ -66,6 +72,48 @@ public class Section {
      */
     public void setDivision(String data) {
         division = data;
+    }
+
+    /**
+     * @param data
+     */
+    public void setPrerequisites(String data) {
+        prereqs = data;
+    }
+
+    /**
+     * @param data
+     */
+    public void setTitle(String data) {
+        title = data;
+    }
+
+    /**
+     * @param data
+     */
+    public void setFacultyMember(String data) {
+        faculty = data;
+    }
+
+    /**
+     * @param data
+     */
+    public void setEnrollment(String data) {
+        enrollment = data;
+    }
+
+    /**
+     * @param data
+     */
+    public void setCapacity(String data) {
+        capacity = data;
+    }
+
+    /**
+     * @param data
+     */
+    public void setRoom(String data) {
+        room = data;
     }
 
 }

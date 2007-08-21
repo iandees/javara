@@ -110,10 +110,10 @@ public class Main {
                 if(a.getNodeName().equals("td") && a.hasChildNodes()) {
                     String data = a.getChildNodes().item(0).getNodeValue();
                     
-                    theSection.setCredits(data);
+                    theSection.setPrerequisites(data);
                     System.out.println("    Prerequisites: " + data);
                 } else {
-                    theSection.setCredits(null);
+                    theSection.setPrerequisites(null);
                 }
                 
                 // course title
@@ -121,10 +121,10 @@ public class Main {
                 if(a.getNodeName().equals("td") && a.hasChildNodes()) {
                     String data = a.getChildNodes().item(0).getNodeValue();
                     
-                    theSection.setCredits(data);
+                    theSection.setTitle(data);
                     System.out.println("    Course Title: " + data);
                 } else {
-                    theSection.setCredits(null);
+                    theSection.setTitle(null);
                 }
                 
                 // faculty member
@@ -132,10 +132,10 @@ public class Main {
                 if(a.getNodeName().equals("td") && a.hasChildNodes()) {
                     String data = a.getChildNodes().item(0).getNodeValue();
                     
-                    theSection.setCredits(data);
+                    theSection.setFacultyMember(data);
                     System.out.println("    Faculty: " + data);
                 } else {
-                    theSection.setCredits(null);
+                    theSection.setFacultyMember(null);
                 }
                 
                 // enrollment
@@ -143,10 +143,10 @@ public class Main {
                 if(a.getNodeName().equals("td") && a.hasChildNodes()) {
                     String data = a.getChildNodes().item(0).getNodeValue();
                     
-                    theSection.setCredits(data);
+                    theSection.setEnrollment(data);
                     System.out.println("    Enroll: " + data);
                 } else {
-                    theSection.setCredits(null);
+                    theSection.setEnrollment(null);
                 }
                 
                 // capacity
@@ -154,21 +154,21 @@ public class Main {
                 if(a.getNodeName().equals("td") && a.hasChildNodes()) {
                     String data = a.getChildNodes().item(0).getNodeValue();
                     
-                    theSection.setCredits(data);
+                    theSection.setCapacity(data);
                     System.out.println("    Cap: " + data);
                 } else {
-                    theSection.setCredits(null);
+                    theSection.setCapacity(null);
                 }
                 
                 // room
                 a = classdata.item(10);
-                if(a.getNodeName().equals("td") && a.hasChildNodes()) {
-                    String data = a.getChildNodes().item(0).getNodeValue();
+                if(a.getNodeName().equals("td") && a.hasChildNodes() && a.getChildNodes().item(0).getNodeName().equals("a") && (a.getChildNodes().item(0).getChildNodes().item(0) != null)) {
+                    String data = a.getChildNodes().item(0).getChildNodes().item(0).getNodeValue();
                     
-                    theSection.setCredits(data);
+                    theSection.setRoom(data);
                     System.out.println("    Room: " + data);
                 } else {
-                    theSection.setCredits(null);
+                    theSection.setRoom(null);
                 }
                 
                 System.out.println(a.getNodeName());
