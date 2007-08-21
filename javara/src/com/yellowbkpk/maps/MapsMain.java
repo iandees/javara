@@ -1,10 +1,5 @@
 package com.yellowbkpk.maps;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.yellowbkpk.maps.gui.GoogleMapUtilities;
 import com.yellowbkpk.maps.gui.MapDisplayFrame;
 import com.yellowbkpk.maps.gui.MapDisplayPanel;
 import com.yellowbkpk.maps.map.GLatLng;
@@ -13,6 +8,15 @@ import com.yellowbkpk.maps.map.Map;
 public class MapsMain {
 
     public static void main(String[] args) {
+        /*
+        // Modify system properties
+        Properties sysProperties = System.getProperties();
+        // Specify proxy settings
+        sysProperties.put("proxyHost", "3.20.128.6");
+        sysProperties.put("proxyPort", "88");
+        sysProperties.put("proxySet",  "true");
+        */
+        
         final Map map = new Map();
         final MapDisplayPanel panel = new MapDisplayPanel(map);
         final MapDisplayFrame frame = new MapDisplayFrame(panel);
