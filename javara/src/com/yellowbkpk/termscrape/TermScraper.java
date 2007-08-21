@@ -194,13 +194,15 @@ public class TermScraper {
                     if(strings.length == 2) {
                         theSection.setBuilding(strings[0]);
                         theSection.setRoomnumber(strings[1]);
+
+                        System.out.println("Building: " + strings[0]);
+                        System.out.println("Room: " + strings[1]);
                     } else {
                         theSection.setBuilding("");
                         theSection.setRoomnumber(strings[0]);
-                    }
 
-                    System.out.println("Building: " + strings[0]);
-                    System.out.println("Room: " + strings[1]);
+                        System.out.println("Room: " + strings[0]);
+                    }
                 } else {
                     theSection.setRoomnumber("");
                     theSection.setBuilding("");
