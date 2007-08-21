@@ -10,10 +10,10 @@ public class TermScraperBootstrap {
      * @param args
      */
     public static void main(String[] args) {
-        String dbHost = System.getProperty("db.host");
-        String dbName = System.getProperty("db.name");
-        String dbUsername = System.getProperty("db.username");
-        String dbPassword = System.getProperty("db.password");
+        String dbHost = args[0];
+        String dbName = args[1];
+        String dbUsername = args[2];
+        String dbPassword = args[3];
         ScraperOutput mysqlOutput = new MySQLScraperOutput(dbHost, dbName, dbUsername, dbPassword);
         
         for(int year = 2006; year < 2009; year++) {
