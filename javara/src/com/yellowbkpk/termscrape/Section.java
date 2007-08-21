@@ -1,9 +1,4 @@
 package com.yellowbkpk.termscrape;
-/*
- * Section.java
- *
- * Copyright 2007 General Electric Company. All Rights Reserved.
- */
 
 /**
  * @author Ian Dees
@@ -11,7 +6,6 @@ package com.yellowbkpk.termscrape;
  */
 public class Section {
 
-    private boolean isFirstYearOnly;
     private String department;
     private Integer block;
     private String sectionID;
@@ -23,13 +17,16 @@ public class Section {
     private String faculty;
     private String enrollment;
     private String capacity;
-    private String room;
+    private String building;
+    private String roomNumber;
+    private int year;
+    private boolean freshmanOnly;
 
     /**
      * @param b
      */
     public void setFirstYearOnly(boolean b) {
-        isFirstYearOnly = b;
+        freshmanOnly = b;
     }
 
     /**
@@ -112,8 +109,127 @@ public class Section {
     /**
      * @param data
      */
-    public void setRoom(String data) {
-        room = data;
+    public void setRoomnumber(String data) {
+        roomNumber = data;
+    }
+
+    /**
+     * @param data
+     */
+    public void setBuilding(String data) {
+        building = data;
+    }
+
+    /**
+     * @param data
+     */
+    public void setYear(int data) {
+        year = data;
+    }
+
+    /**
+     * @return the department
+     */
+    public String getDepartment() {
+        return department;
+    }
+
+    /**
+     * @return the block
+     */
+    public Integer getBlock() {
+        return block;
+    }
+
+    /**
+     * @return the sectionID
+     */
+    public String getSectionID() {
+        return sectionID;
+    }
+
+    /**
+     * @return the catalogURL
+     */
+    public String getCatalogURL() {
+        return catalogURL;
+    }
+
+    /**
+     * @return the credits
+     */
+    public String getCredits() {
+        return credits;
+    }
+
+    /**
+     * @return the division
+     */
+    public String getDivision() {
+        return division;
+    }
+
+    /**
+     * @return the prerequisites
+     */
+    public String getPrerequisites() {
+        return prereqs;
+    }
+
+    /**
+     * @return the title
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * @return the faculty
+     */
+    public String getFaculty() {
+        return faculty;
+    }
+
+    /**
+     * @return the enrollment
+     */
+    public String getEnrollment() {
+        return enrollment;
+    }
+
+    /**
+     * @return the capacity
+     */
+    public String getCapacity() {
+        return capacity;
+    }
+
+    /**
+     * @return
+     */
+    public String getBuilding() {
+        return building;
+    }
+
+    /**
+     * @return
+     */
+    public String getRoomnumber() {
+        return roomNumber;
+    }
+
+    /**
+     * @return
+     */
+    public int getYear() {
+        return year;
+    }
+
+    /**
+     * @return
+     */
+    public boolean getFreshmanOnly() {
+        return freshmanOnly;
     }
 
 }
