@@ -1,7 +1,9 @@
 package com.yellowbkpk.termscrape;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -133,9 +135,10 @@ public class TermScraper {
                     String data = a.getChildNodes().item(0).getChildNodes().item(0).getAttributes().item(0)
                             .getNodeValue();
                     data = data.substring(23, data.length() - 7);
+                    data = fetchPrerequisites(data);
 
                     theSection.setPrerequisites(data);
-                    System.out.println("Prerequisites URL: " + data);
+                    System.out.println("Prerequisites: " + data);
                 } else {
                     theSection.setPrerequisites("");
                 }
@@ -144,6 +147,7 @@ public class TermScraper {
                 a = classdata.item(6);
                 if (a.getNodeName().equals("td") && a.hasChildNodes()) {
                     String data = a.getChildNodes().item(0).getNodeValue();
+                    data = escapeLine(data);
 
                     theSection.setTitle(data);
                     System.out.println("Course Title: " + data);
@@ -155,6 +159,7 @@ public class TermScraper {
                 a = classdata.item(7);
                 if (a.getNodeName().equals("td") && a.hasChildNodes()) {
                     String data = a.getChildNodes().item(0).getNodeValue();
+                    data = escapeLine(data);
 
                     theSection.setFacultyMember(data);
                     System.out.println("Faculty: " + data);
@@ -219,6 +224,58 @@ public class TermScraper {
             e.printStackTrace();
             return;
         }
+    }
+    
+    /**
+     * @param data
+     */
+    private String fetchPrerequisites(String data) {
+        try {
+            InputStream fileIS = new URL("http://www.cornellcollege.edu/term_table/" + data).openStream();
+            BufferedReader in = new BufferedReader(new InputStreamReader(fileIS));
+            StringBuffer b = new StringBuffer();
+            
+            String s = null;
+            while((s = in.readLine()) != null) {
+                b.append(s);
+            }
+            String whole = b.toString();
+            in.close();
+            
+            int start = whole.indexOf(" Prerequisites</strong><br><br><strong>");
+            if(start > 0) {
+                start += 39;
+                int end = whole.indexOf("<br><script src=\'http://w");
+                if(end > 0) {
+                    String substring = whole.substring(start, end);
+                    substring = substring.replaceAll("<br>", ", ");
+                    substring = substring.replaceAll("</?[A-Za-z]+\\b[^>]*>", "");
+                    return escapeLine(substring);
+                }
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    static public String escapeLine(String s) {
+        String retvalue = s;
+        if (s.indexOf("'") != -1) {
+            StringBuffer hold = new StringBuffer();
+            char c;
+            for (int i = 0; i < s.length(); i++) {
+                if ((c = s.charAt(i)) == '\'') {
+                    hold.append("''");
+                } else {
+                    hold.append(c);
+                }
+            }
+            retvalue = hold.toString();
+        }
+        return retvalue;
     }
 
 }
