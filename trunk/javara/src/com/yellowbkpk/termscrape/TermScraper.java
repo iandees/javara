@@ -36,6 +36,9 @@ public class TermScraper {
         this.tidy.setIndentContent(true);
         this.tidy.setQuiet(true);
         this.tidy.setShowWarnings(false);
+        
+        // Initialize the output object
+        this.output = output;
     }
 
     /**
