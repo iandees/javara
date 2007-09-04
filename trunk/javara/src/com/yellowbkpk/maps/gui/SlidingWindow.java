@@ -2,6 +2,8 @@ package com.yellowbkpk.maps.gui;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.yellowbkpk.maps.GLatLngBounds;
 import com.yellowbkpk.maps.map.GLatLng;
@@ -21,10 +23,13 @@ public class SlidingWindow {
     private Point nw;
     private Point se;
     private GLatLngBounds bounds;
+    private List<MapDisplayUpdateListener> updateListeners;
 
     public SlidingWindow(GLatLng llCenter, Dimension size) {
         center = llCenter;
         pixelSize = size;
+        
+        updateListeners = new ArrayList<MapDisplayUpdateListener>();
         
         updateWindow();
     }
@@ -56,8 +61,15 @@ public class SlidingWindow {
         northwest = new GLatLng(nwLat, nwLng);
         southeast = new GLatLng(seLat, seLng);
         bounds = new GLatLngBounds(northwest, southeast);
+        notifyListeners();
     }
     
+    private void notifyListeners() {
+        for (MapDisplayUpdateListener listener : updateListeners) {
+            listener.needsRedraw();
+        }
+    }
+
     public GLatLng getNorthwest() {
         return northwest;
     }
@@ -177,6 +189,13 @@ public class SlidingWindow {
      */
     public GLatLngBounds getGBounds() {
         return bounds;
+    }
+
+    /**
+     * @param mapDisplayPanel
+     */
+    public void registerForUpdates(MapDisplayUpdateListener mapDisplayPanel) {
+        updateListeners.add(mapDisplayPanel);
     }
 
 }

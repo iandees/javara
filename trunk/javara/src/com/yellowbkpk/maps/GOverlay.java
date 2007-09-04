@@ -2,26 +2,49 @@ package com.yellowbkpk.maps;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.image.ImageObserver;
-
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Ian Dees
- *
+ * 
  */
-public interface GOverlay {
+public abstract class GOverlay {
 
+    private List<OverlayUpdateListener> overlayUpdateListeners;
+
+    public GOverlay() {
+        overlayUpdateListeners = new ArrayList<OverlayUpdateListener>();
+    }
+    
     /**
      * @return
      */
-    boolean shouldDraw(GLatLngBounds view);
+    public abstract boolean shouldDraw(GLatLngBounds view);
 
     /**
      * @param dbg2
-     * @param nwPoint 
-     * @param imageObserver TODO
+     * @param bounds
+     * @param imageObserver
+     *            TODO
      * @param bounds
      */
-    void drawOverlay(Graphics2D dbg2, Point nwPoint, int zoom, GLatLngBounds viewBounds, ImageObserver imageObserver);
+    public abstract void drawOverlay(Graphics2D dbg2, Rectangle bounds, int zoom, GLatLngBounds viewBounds,
+            ImageObserver imageObserver);
+
+    /**
+     * @param listener
+     */
+    public synchronized void registerForUpdates(OverlayUpdateListener listener) {
+        overlayUpdateListeners.add(listener);
+    }
+    
+    void notifyOverlayListeners() {
+        for (OverlayUpdateListener listener : overlayUpdateListeners) {
+            listener.overlayUpdated();
+        }
+    }
 
 }
