@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
@@ -25,19 +26,17 @@ import com.yellowbkpk.maps.GOverlay;
 import com.yellowbkpk.maps.MapMouseListener;
 import com.yellowbkpk.maps.map.GLatLng;
 import com.yellowbkpk.maps.map.Map;
+import com.yellowbkpk.maps.map.MapUpdateListener;
 
-public class MapDisplayPanel extends JPanel implements Runnable {
+public class MapDisplayPanel extends JPanel implements MapDisplayUpdateListener, ImageUpdateListener, MapUpdateListener {
 
     private static final int TILE_SIZE = 256;
-    private static final long TIME_PER_FRAME = 50;
     private static final Dimension SIZE = new Dimension(800, 600);
     private static final GLatLng DEFAULT_CENTER = new GLatLng(43, -90);
 	protected static final double MAX_PAN_VELOCITY = 3.0;
     
     private Map map;
     private Image dbImage;
-    private Thread animator;
-    private boolean running;
     private Graphics dbg;
     protected Point mousedownPoint;
     protected Point originalPixelCenter;
@@ -50,18 +49,22 @@ public class MapDisplayPanel extends JPanel implements Runnable {
     public MapDisplayPanel(Map m) {
         setPreferredSize(new Dimension(800,600));
         setFocusable(true);
+        mapMouseListeners = new ArrayList<MapMouseListener>();
 
         initialized = false;
         map = m;
+        map.registerForUpdates(this);
         
         loadingTileImage = new BufferedImage(TILE_SIZE, TILE_SIZE, BufferedImage.TYPE_INT_RGB);
         Graphics graphics = loadingTileImage.getGraphics();
         graphics.setColor(Color.gray);
         graphics.drawString("Loading...", 120, 128);
+        
         imageCache = new ImageCache();
+        imageCache.registerForUpdates(this);
         
         mapSlidingWindow = new SlidingWindow(DEFAULT_CENTER, SIZE);
-        mapMouseListeners = new ArrayList<MapMouseListener>();
+        mapSlidingWindow.registerForUpdates(this);
         
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
@@ -176,40 +179,10 @@ public class MapDisplayPanel extends JPanel implements Runnable {
         });
     }
 
-    public void addNotify() {
-        super.addNotify();
-        startAnimation();
-    }
-
-    private void startAnimation() {
-        if (animator == null || !running) {
-            animator = new Thread(this);
-            animator.start();
-        }
-    }
-
-    public void stopAnimation() {
-        running = false;
-    }
-
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if(dbImage != null) {
             g.drawImage(dbImage, 0, 0, null);
-        }
-    }
-
-    public void run() {
-        running = true;
-
-        while (running) {
-            mapRender();
-            repaint();
-
-            try {
-                Thread.sleep(TIME_PER_FRAME);
-            } catch (InterruptedException e) {
-            }
         }
     }
 
@@ -219,9 +192,6 @@ public class MapDisplayPanel extends JPanel implements Runnable {
         }
         
         dbg = dbImage.getGraphics();
-
-        dbg.setColor(Color.gray);
-        dbg.fillRect(0, 0, dbImage.getWidth(this), dbImage.getHeight(this));
 
         if(initialized) {
             drawField((Graphics2D) dbg);
@@ -282,7 +252,8 @@ public class MapDisplayPanel extends JPanel implements Runnable {
 
         Collection<GOverlay> overlays = map.getOverlays(getGBounds());
         for (GOverlay overlay : overlays) {
-            overlay.drawOverlay(dbg2, mapSlidingWindow.getNorthwestPoint(), mapSlidingWindow.getZoom(), getGBounds(), this);
+            Rectangle bounds = new Rectangle(mapSlidingWindow.getNorthwestPoint().x, mapSlidingWindow.getNorthwestPoint().y, getWidth(), getHeight());
+            overlay.drawOverlay(dbg2, bounds, mapSlidingWindow.getZoom(), getGBounds(), this);
         }
 
         // Draw a center cross hatch
@@ -319,5 +290,20 @@ public class MapDisplayPanel extends JPanel implements Runnable {
     public void setCenter(GLatLng latLng, int zoom) {
         initialized = true;
         mapSlidingWindow.setCenter(latLng, zoom);
+    }
+
+    public void needsRedraw() {
+        mapRender();
+        repaint();
+    }
+
+    public void imageUpdated() {
+        mapRender();
+        repaint();
+    }
+
+    public void mapUpdated() {
+        mapRender();
+        repaint();
     }
 }

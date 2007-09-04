@@ -9,9 +9,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -21,10 +22,11 @@ public class ImageCache {
     private static final int TILE_SIZE = 256;
     private static final String CACHE_DIR = "cache";
     private static final int MAX_CACHE_SIZE = 128;
-    ConcurrentHashMap<String, Image> cacheMap;
+    HashMap<String, Image> cacheMap;
     Map<String, Thread> imgFetchers;
     private String baseURL = "http://mt3.google.com/mt?n=404&v=w2.60&";
     private BufferedImage noImageTile;
+    private List<ImageUpdateListener> imageUpdateListeners;
     private static final boolean NETWORK_ACCESS_ENABLED = true;
     
     public ImageCache() {
@@ -35,8 +37,10 @@ public class ImageCache {
         graphics.setColor(Color.white);
         graphics.drawString("No Image", 120, 128);
         
-        cacheMap = new ConcurrentHashMap<String, Image>();
+        cacheMap = new HashMap<String, Image>();
         imgFetchers = new HashMap<String, Thread>();
+        
+        imageUpdateListeners = new ArrayList<ImageUpdateListener>();
     }
     
     public Image get(int x, int y, int zoom) {
@@ -60,7 +64,6 @@ public class ImageCache {
         }
 
         final String url = baseURL + "x=" + correctedX + "&y=" + y + "&zoom=" + zoom;
-
         
         Image image = cacheMap.get(url);
         // If the image was not in memory cache
@@ -75,13 +78,9 @@ public class ImageCache {
                     Thread imgFetcher = new Thread(new Runnable() {
                         public void run() {
                             Image image = null;
-                            try {
-                                image = ImageIO.read(new File(file.getPath()));
-                            } catch (IOException e) {
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
-                            }
+                            image = new ImageIcon(file.getPath()).getImage();
                             cacheMap.put(url, image);
+                            notifyImageUpdate();
                             imgFetchers.remove(url);
                             
                         }
@@ -132,7 +131,7 @@ public class ImageCache {
                                 System.err.println("Could not load " + u + " code was " + i.getImageLoadStatus());
                                 cacheMap.put(url, noImageTile);
                             }
-
+                            notifyImageUpdate();
                             imgFetchers.remove(url);
                         }
                     });
@@ -152,6 +151,22 @@ public class ImageCache {
             
             return image;
         }
+    }
+
+    /**
+     * 
+     */
+    protected void notifyImageUpdate() {
+        for (ImageUpdateListener listener : imageUpdateListeners) {
+            listener.imageUpdated();
+        }
+    }
+
+    /**
+     * @param mapDisplayPanel
+     */
+    public void registerForUpdates(ImageUpdateListener listener) {
+        imageUpdateListeners.add(listener);
     }
 
 }
