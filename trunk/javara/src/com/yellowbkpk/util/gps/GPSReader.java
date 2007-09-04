@@ -20,9 +20,6 @@ import javax.comm.UnsupportedCommOperationException;
  */
 public class GPSReader extends Thread implements SerialPortEventListener {
     
-    /**
-     * 
-     */
     private static final double MPH_PER_KNOT = 1.1507;
     private static final String CMD_GPRMC = "$GPRMC";
     private static final String CMD_GPVTG = "$GPVTG";
@@ -163,7 +160,7 @@ public class GPSReader extends Thread implements SerialPortEventListener {
             System.out.println(speedMPH + "mph");
             double courseDegrees = Double.parseDouble(commands[8]);
             
-            notifyOfNewLocation(lat, lng);
+            notifyOfNewLocation(lat, lng, speedMPH, courseDegrees);
             
         } else if(CMD_GPVTG.equals(command)) {
             
@@ -211,10 +208,12 @@ public class GPSReader extends Thread implements SerialPortEventListener {
     /**
      * @param lat
      * @param lng
+     * @param course 
+     * @param speed 
      */
-    private void notifyOfNewLocation(double lat, double lng) {
+    private void notifyOfNewLocation(double lat, double lng, double speed, double course) {
         for (GPSChangeListener listener : listeners) {
-            listener.locationUpdated(lat, lng);
+            listener.locationUpdated(lat, lng, speed, course);
         }
     }
 
