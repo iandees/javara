@@ -22,7 +22,7 @@ public class ImageCache {
     private static final int TILE_SIZE = 256;
     private static final String CACHE_DIR = "cache";
     private static final int MAX_CACHE_SIZE = 128;
-    HashMap<String, Image> cacheMap;
+    Map<String, Image> cacheMap;
     Map<String, Thread> imgFetchers;
     private String baseURL = "http://mt3.google.com/mt?n=404&v=w2.60&";
     private BufferedImage noImageTile;
@@ -122,8 +122,9 @@ public class ImageCache {
                                 bIGraphics.drawImage(i.getImage(), 0, 0, null);
                                 bIGraphics.dispose();
                                 try {
-                                    file.mkdirs();
-                                    ImageIO.write(bI, "PNG", file);
+                                    final File file2 = new File(file.getAbsolutePath());
+                                    file2.mkdirs();
+                                    ImageIO.write(bI, "PNG", file2);
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
