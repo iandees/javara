@@ -66,5 +66,10 @@ public class GLatLngBounds {
             locNWX < x1 &&
             locNWY < y1);
     }
+
+    public String toString() {
+        return northwest.toString() + "," + southeast.toString();
+    }
+    
     
 }

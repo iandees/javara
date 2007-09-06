@@ -194,6 +194,7 @@ public class MapDisplayPanel extends JPanel implements MapDisplayUpdateListener,
         dbg = dbImage.getGraphics();
 
         if(initialized) {
+            dbg.clearRect(0, 0, getWidth(), getHeight());
             drawField((Graphics2D) dbg);
         }
     }
