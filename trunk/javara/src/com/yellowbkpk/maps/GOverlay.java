@@ -1,7 +1,6 @@
 package com.yellowbkpk.maps;
 
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.ImageObserver;
 import java.util.ArrayList;
@@ -14,9 +13,11 @@ import java.util.List;
 public abstract class GOverlay {
 
     private List<OverlayUpdateListener> overlayUpdateListeners;
+    private boolean visible;
 
     public GOverlay() {
         overlayUpdateListeners = new ArrayList<OverlayUpdateListener>();
+        setVisible(true);
     }
     
     /**
@@ -45,6 +46,15 @@ public abstract class GOverlay {
         for (OverlayUpdateListener listener : overlayUpdateListeners) {
             listener.overlayUpdated();
         }
+    }
+    
+    public void setVisible(boolean visi) {
+        visible = visi;
+        notifyOverlayListeners();
+    }
+    
+    public boolean isVisible() {
+        return visible;
     }
 
 }

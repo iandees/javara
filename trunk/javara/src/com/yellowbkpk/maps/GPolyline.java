@@ -60,6 +60,10 @@ public class GPolyline extends GOverlay {
     }
 
     public synchronized boolean shouldDraw(GLatLngBounds viewBounds) {
+        if(!isVisible()) {
+            return false;
+        }
+        
         if (myPoints.size() < 2) {
             return false;
         } else {

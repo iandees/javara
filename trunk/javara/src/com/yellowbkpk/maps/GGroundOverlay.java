@@ -61,7 +61,7 @@ public class GGroundOverlay extends GOverlay {
     }
 
     public boolean shouldDraw(GLatLngBounds view) {
-        return (view.contains(myBounds));
+        return isVisible() && (view.contains(myBounds));
     }
 
 }

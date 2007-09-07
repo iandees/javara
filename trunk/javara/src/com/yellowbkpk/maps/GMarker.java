@@ -30,7 +30,7 @@ public class GMarker extends GOverlay {
     }
 
     public synchronized boolean shouldDraw(GLatLngBounds viewBounds) {
-        return viewBounds.contains(myBounds);
+        return isVisible() && viewBounds.contains(myBounds);
     }
 
     public synchronized void drawOverlay(Graphics2D dbg2, Rectangle bounds, int zoom, GLatLngBounds viewBounds, ImageObserver imageObserver) {
