@@ -16,7 +16,7 @@ import java.util.List;
  * @author Ian Dees
  *
  */
-public class GOverlayLayer extends GOverlay {
+public class GOverlayLayer extends GOverlay implements OverlayUpdateListener {
 
     List<GOverlay> overlays;
     
@@ -34,6 +34,10 @@ public class GOverlayLayer extends GOverlay {
     }
 
     public boolean shouldDraw(GLatLngBounds view) {
+        if(!isVisible()) {
+            return false;
+        }
+        
         for (GOverlay overlay : overlays) {
             if(overlay.shouldDraw(view)) {
                 return true;
@@ -45,5 +49,16 @@ public class GOverlayLayer extends GOverlay {
 
     public void addOverlay(GOverlay overlay) {
         overlays.add(overlay);
+        overlay.registerForUpdates(this);
+        notifyOverlayListeners();
+    }
+
+    public void clearOverlays() {
+        overlays.clear();
+        notifyOverlayListeners();
+    }
+
+    public void overlayUpdated() {
+        notifyOverlayListeners();
     }
 }

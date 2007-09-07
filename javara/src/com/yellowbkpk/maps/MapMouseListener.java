@@ -10,10 +10,8 @@ import com.yellowbkpk.maps.map.GLatLng;
  */
 public interface MapMouseListener extends EventListener {
 
-    /**
-     * @param clickLL
-     * @param i
-     */
     void mouseClicked(GLatLng latLng, int clickCount);
+
+    void mouseDragged(GLatLng latLng);
 
 }

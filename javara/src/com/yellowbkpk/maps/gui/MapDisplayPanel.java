@@ -44,12 +44,15 @@ public class MapDisplayPanel extends JPanel implements MapDisplayUpdateListener,
     private ImageCache imageCache;
     private Image loadingTileImage;
     private List<MapMouseListener> mapMouseListeners;
+    private List<MapKeyListener> mapKeyListeners;
     private boolean initialized;
+    protected boolean dragPanEnabled = true;
 
     public MapDisplayPanel(Map m) {
         setPreferredSize(new Dimension(800,600));
         setFocusable(true);
         mapMouseListeners = new ArrayList<MapMouseListener>();
+        mapKeyListeners = new ArrayList<MapKeyListener>();
 
         initialized = false;
         map = m;
@@ -68,8 +71,10 @@ public class MapDisplayPanel extends JPanel implements MapDisplayUpdateListener,
         
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                mousedownPoint = e.getPoint();
-                originalPixelCenter = mapSlidingWindow.getGlobalPixelCenter();
+                if (dragPanEnabled) {
+                    mousedownPoint = e.getPoint();
+                    originalPixelCenter = mapSlidingWindow.getGlobalPixelCenter();
+                }
             }
 
             public void mouseClicked(MouseEvent e) {
@@ -94,13 +99,22 @@ public class MapDisplayPanel extends JPanel implements MapDisplayUpdateListener,
         
         addMouseMotionListener(new MouseMotionAdapter() {
             public void mouseDragged(MouseEvent e) {
-                int dx = e.getX() - mousedownPoint.x;
-                int dy = e.getY() - mousedownPoint.y;
-                int newPixelCenterX = originalPixelCenter.x - dx;
-                int newPixelCenterY = originalPixelCenter.y - dy;
-                Point newPixelCenter = new Point(newPixelCenterX, newPixelCenterY);
+                if (dragPanEnabled) {
+                    int dx = e.getX() - mousedownPoint.x;
+                    int dy = e.getY() - mousedownPoint.y;
+                    int newPixelCenterX = originalPixelCenter.x - dx;
+                    int newPixelCenterY = originalPixelCenter.y - dy;
+                    Point newPixelCenter = new Point(newPixelCenterX, newPixelCenterY);
+
+                    mapSlidingWindow.setPixelCenter(newPixelCenter);
+                }
                 
-                mapSlidingWindow.setPixelCenter(newPixelCenter);
+                double lng = GoogleMapUtilities.xToLng(mapSlidingWindow.getNorthwestPoint().x + e.getX(), 17-mapSlidingWindow.getZoom());
+                double lat = GoogleMapUtilities.yToLat(mapSlidingWindow.getNorthwestPoint().y + e.getY(), 17-mapSlidingWindow.getZoom());
+                GLatLng clickLL = new GLatLng(lat, lng);
+                for (MapMouseListener listener : mapMouseListeners) {
+                    listener.mouseDragged(clickLL);
+                }
             }
         });
         
@@ -175,6 +189,9 @@ public class MapDisplayPanel extends JPanel implements MapDisplayUpdateListener,
 			}
 
 			public void keyTyped(KeyEvent e) {
+			    for (MapKeyListener listener : mapKeyListeners) {
+                    listener.keyTyped(e);
+                }
 			}
         });
     }
@@ -284,6 +301,10 @@ public class MapDisplayPanel extends JPanel implements MapDisplayUpdateListener,
         mapMouseListeners.add(listener);
     }
 
+    public void addMapKeyListener(MapKeyListener listener) {
+        mapKeyListeners.add(listener);
+    }
+
     /**
      * @param latLng
      * @param i
@@ -306,5 +327,9 @@ public class MapDisplayPanel extends JPanel implements MapDisplayUpdateListener,
     public void mapUpdated() {
         mapRender();
         repaint();
+    }
+
+    public void setDragPanEnabled(boolean b) {
+        dragPanEnabled = b;
     }
 }

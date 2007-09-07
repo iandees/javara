@@ -15,9 +15,13 @@ import com.yellowbkpk.maps.map.GLatLng;
 public class GRectangle extends GOverlay {
 
     private GLatLngBounds llBounds;
+    private Color outlineColor;
+    private Color fillColor;
     
     public GRectangle(GLatLngBounds bnds) {
         llBounds = bnds;
+        outlineColor = Color.red;
+        fillColor = new Color(255,0,0,50);
     }
 
     public GRectangle(GLatLng nw, GLatLng se) {
@@ -41,14 +45,24 @@ public class GRectangle extends GOverlay {
         x -= bounds.x;
         y -= bounds.y;
         
-        dbg2.setColor(Color.red);
+        dbg2.setColor(outlineColor);
         dbg2.drawRect(x, y, width, height);
-        dbg2.setColor(new Color(255,0,0,25));
+        dbg2.setColor(fillColor);
         dbg2.fillRect(x, y, width, height);
     }
 
     public boolean shouldDraw(GLatLngBounds view) {
-        return true;
+        return isVisible() && true;
+    }
+    
+    public void setOutlineColor(Color c) {
+        outlineColor = c;
+        notifyOverlayListeners();
+    }
+    
+    public void setFillColor(Color c) {
+        fillColor = c;
+        notifyOverlayListeners();
     }
 
 }

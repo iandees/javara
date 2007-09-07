@@ -27,6 +27,7 @@ public class ImageCache {
     private String baseURL = "http://mt3.google.com/mt?n=404&v=w2.60&";
     private BufferedImage noImageTile;
     private List<ImageUpdateListener> imageUpdateListeners;
+    private HashMap<String, Long> cacheMapAge;
     private static final boolean NETWORK_ACCESS_ENABLED = true;
     
     public ImageCache() {
@@ -77,12 +78,12 @@ public class ImageCache {
                 if (thread == null) {
                     Thread imgFetcher = new Thread(new Runnable() {
                         public void run() {
+                            File tFile = new File(file.getAbsolutePath());
                             Image image = null;
-                            image = new ImageIcon(file.getPath()).getImage();
+                            image = new ImageIcon(tFile.getPath()).getImage();
                             cacheMap.put(url, image);
                             notifyImageUpdate();
                             imgFetchers.remove(url);
-                            
                         }
                     });
                     imgFetchers.put(url, imgFetcher);
@@ -131,6 +132,7 @@ public class ImageCache {
                             } else {
                                 System.err.println("Could not load " + u + " code was " + i.getImageLoadStatus());
                                 cacheMap.put(url, noImageTile);
+                                cacheMapAge.put(url, System.currentTimeMillis());
                             }
                             notifyImageUpdate();
                             imgFetchers.remove(url);
