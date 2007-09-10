@@ -27,8 +27,7 @@ public class ImageCache {
     private String baseURL = "http://mt3.google.com/mt?n=404&v=w2.60&";
     private BufferedImage noImageTile;
     private List<ImageUpdateListener> imageUpdateListeners;
-    private HashMap<String, Long> cacheMapAge;
-    private static final boolean NETWORK_ACCESS_ENABLED = true;
+    private boolean netAccessEnabled = false;
     
     public ImageCache() {
         noImageTile = new BufferedImage(TILE_SIZE, TILE_SIZE, BufferedImage.TYPE_INT_RGB);
@@ -44,7 +43,7 @@ public class ImageCache {
         imageUpdateListeners = new ArrayList<ImageUpdateListener>();
     }
     
-    public Image get(int x, int y, int zoom) {
+    public synchronized Image get(int x, int y, int zoom) {
         final int tilesAtZoom = GoogleMapUtilities.tilesAtZoom(zoom);
 
         if (y < 0) {
@@ -95,7 +94,7 @@ public class ImageCache {
                 }
             } else {
                 // If network access is turned on
-                if(!NETWORK_ACCESS_ENABLED) {
+                if(!netAccessEnabled) {
                     return noImageTile;
                 }
                 
@@ -132,7 +131,6 @@ public class ImageCache {
                             } else {
                                 System.err.println("Could not load " + u + " code was " + i.getImageLoadStatus());
                                 cacheMap.put(url, noImageTile);
-                                cacheMapAge.put(url, System.currentTimeMillis());
                             }
                             notifyImageUpdate();
                             imgFetchers.remove(url);
@@ -168,8 +166,15 @@ public class ImageCache {
     /**
      * @param mapDisplayPanel
      */
-    public void registerForUpdates(ImageUpdateListener listener) {
+    public synchronized void registerForUpdates(ImageUpdateListener listener) {
         imageUpdateListeners.add(listener);
+    }
+
+    /**
+     * @param b
+     */
+    public synchronized void setNetConnectionEnabled(boolean b) {
+        netAccessEnabled = b;
     }
 
 }

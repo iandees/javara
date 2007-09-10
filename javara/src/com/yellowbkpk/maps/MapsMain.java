@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.comm.NoSuchPortException;
+import javax.comm.PortInUseException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
@@ -27,6 +29,8 @@ import com.yellowbkpk.maps.gui.MapDisplayFrame;
 import com.yellowbkpk.maps.gui.MapDisplayPanel;
 import com.yellowbkpk.maps.map.GLatLng;
 import com.yellowbkpk.maps.map.Map;
+import com.yellowbkpk.util.gps.GPSChangeListener;
+import com.yellowbkpk.util.gps.GPSReader;
 
 public class MapsMain {
 
@@ -56,7 +60,7 @@ public class MapsMain {
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
         final JCheckBoxMenuItem showCoverage = new JCheckBoxMenuItem("Show Coverage");
-        showCoverage.setState(true);
+        showCoverage.setState(false);
         showCoverage.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (showCoverage.getState()) {
@@ -110,6 +114,20 @@ public class MapsMain {
             }
         });
         fileMenu.add(enableDownloadDraggerItem);
+        final JCheckBoxMenuItem enableNetConnectionItem = new JCheckBoxMenuItem("Enable Net Connection");
+        enableNetConnectionItem.setState(false);
+        enableNetConnectionItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (enableNetConnectionItem.getState()) {
+                    enableNetConnectionItem.setState(true);
+                    panel.setNetConnectionEnabled(true);
+                } else {
+                    enableNetConnectionItem.setState(false);
+                    panel.setNetConnectionEnabled(false);
+                }
+            }
+        });
+        fileMenu.add(enableNetConnectionItem);
         menuBar.add(fileMenu );
         frame.setJMenuBar(menuBar);
         
@@ -127,13 +145,13 @@ public class MapsMain {
         // Scan a cache directory for all the images in it
         layer = new GOverlayLayer();
         map.addOverlay(layer);
-        updateCoverageOverlay();
+        //updateCoverageOverlay();
         
         panel.addMapMouseListener(new MapMouseListener() {
             public void mouseClicked(GLatLng latLng, int clickCount) {
             }
             public void mouseDragged(final GLatLng latLng) {
-                if (enableDownloadDraggerItem.getState()) {
+                if (enableNetConnectionItem.getState()) {
                     GLatLng ll = new GLatLng(latLng.getLatitude(), latLng.getLongitude());
                     int globalX = GoogleMapUtilities.lngToX(ll.getLongitude(), coverageZoom);
                     int globalY = GoogleMapUtilities.latToY(ll.getLatitude(), coverageZoom);
@@ -206,16 +224,24 @@ public class MapsMain {
             }
         });
         
-       /*
-         * GPSReader gps = null; try { gps = new GPSReader("COM21"); } catch
-         * (NoSuchPortException e) { e.printStackTrace(); } catch
-         * (PortInUseException e) { e.printStackTrace(); }
-         * gps.addGPSChangeListener(new GPSChangeListener() { public void
-         * locationUpdated(double lat, double lng, double speed, double course) {
-         * dot.setCenter(new GLatLng(lat, lng)); dot.setDirection(course);
-         * line.addPoint(new GLatLng(lat, lng));
-         * speedometerPanel.setSpeed(speed); } });
-         */
+
+        GPSReader gps = null;
+        try {
+            gps = new GPSReader("COM21");
+        } catch (NoSuchPortException e) {
+            e.printStackTrace();
+        } catch (PortInUseException e) {
+            e.printStackTrace();
+        }
+        gps.addGPSChangeListener(new GPSChangeListener() {
+            public void locationUpdated(double lat, double lng, double speed, double course) {
+                dot.setCenter(new GLatLng(lat, lng));
+                dot.setDirection(course);
+                line.addPoint(new GLatLng(lat, lng), Color.getHSBColor((float) (speed/90.0), 1f, 1f));
+                speedometerPanel.setSpeed(speed);
+            }
+        });
+         
     }
 
     protected static void increaseCoverageZoom() {
