@@ -332,4 +332,11 @@ public class MapDisplayPanel extends JPanel implements MapDisplayUpdateListener,
     public void setDragPanEnabled(boolean b) {
         dragPanEnabled = b;
     }
+
+    /**
+     * @param b
+     */
+    public void setNetConnectionEnabled(boolean b) {
+        imageCache.setNetConnectionEnabled(b);
+    }
 }
