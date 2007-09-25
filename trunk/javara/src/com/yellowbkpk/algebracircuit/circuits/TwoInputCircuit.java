@@ -1,5 +1,6 @@
 package com.yellowbkpk.algebracircuit.circuits;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Polygon;
@@ -27,24 +28,29 @@ public abstract class TwoInputCircuit extends BaseCircuit {
         pts.addPoint(ab.x, ab.y);
         pts.addPoint(ac.x, ac.y);
         
+        g.setColor(Color.black);
+        if (inputs[0] != null) {
+            g.drawLine(aa.x, center.y - (RADIUS / 3), inputs[0].getOutputPoint().x, inputs[0].getOutputPoint().y);
+        }
+
+        if (inputs[1] != null) {
+            g.drawLine(ac.x, center.y + (RADIUS / 3), inputs[1].getOutputPoint().x, inputs[1].getOutputPoint().y);
+        }
+        
         g.setColor(getBackgroundColor());
         g.fillPolygon(pts);
         g.setColor(getForegroundColor());
         g.drawPolygon(pts);
         g.setColor(getTextColor());
         g.drawString(getLabel(), center.x - (RADIUS / 3) + 2, center.y + (RADIUS / 8));
-        
-        if (inputs[0] != null) {
-            g.drawLine(center.x, center.y, inputs[0].getCenter().x, inputs[0].getCenter().y);
-        }
-
-        if (inputs[1] != null) {
-            g.drawLine(center.x, center.y, inputs[1].getCenter().x, inputs[1].getCenter().y);
-        }
     }
 
     public Rectangle getBounds() {
         return new Rectangle(aa.x, aa.y, ab.x-aa.x, ac.y-aa.y);
+    }
+
+    public Point getOutputPoint() {
+        return ab;
     }
     
 }

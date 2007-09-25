@@ -12,7 +12,7 @@ public class InputCircuit extends BaseCircuit {
     private Point aa;
     private Point ab;
     private Point ac;
-    private short value;
+    private double value;
 
     public InputCircuit(Point c) {
         super(CircuitsEnum.INPUT, c, "", 0);
@@ -40,12 +40,16 @@ public class InputCircuit extends BaseCircuit {
         return new Rectangle(aa.x, aa.y, ab.x - aa.x, ac.y - aa.y);
     }
 
-    public void setValue(short val) {
-        value = val;
+    public void setValue(double d) {
+        value = d;
     }
 
     public double getValue() {
         return value;
+    }
+
+    public Point getOutputPoint() {
+        return ab;
     }
     
 }

@@ -42,5 +42,9 @@ public abstract class OneInputCircuit extends BaseCircuit {
     public Rectangle getBounds() {
         return new Rectangle(aa.x, aa.y, ab.x-aa.x, ac.y-aa.y);
     }
+
+    public Point getOutputPoint() {
+        return ab;
+    }
     
 }
