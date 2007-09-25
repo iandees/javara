@@ -3,12 +3,11 @@ package com.yellowbkpk.algebracircuit.gui;
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import com.yellowbkpk.algebracircuit.Circuit;
@@ -21,6 +20,7 @@ public class CircuitPanel extends JPanel {
 
     private AlgebraCircuitGUI parent;
     private CircuitState controller;
+    private Circuit selectedCircuit;
 
     public CircuitPanel(AlgebraCircuitGUI parentGUI, CircuitState state) {
         super();
@@ -35,6 +35,7 @@ public class CircuitPanel extends JPanel {
 
             public void mouseClicked(MouseEvent e) {
                 if (parent.getLatchType() != null) {
+                    System.out.println("Adding a circuit.");
                     Circuit circ = CircuitFactory.buildCircuit(parent.getLatchType(), e.getPoint());
                     
                     if (circ != null) {
@@ -44,6 +45,7 @@ public class CircuitPanel extends JPanel {
                         repaint();
                     }
                 } else if(parent.getConnectorLatchCount() > 0) {
+                    System.out.println("Adding a piece of connector.");
                     Circuit clickedCircuit = getClickedCircuit(e.getPoint());
                     
                     if(clickedCircuit == null) {
@@ -51,39 +53,42 @@ public class CircuitPanel extends JPanel {
                     } else {
                         if(parent.getConnectorLatchCount() == 2) {
                             // output
-                            System.err.println("Clicked the first circuit.");
+                            System.out.println("Clicked the first circuit.");
                             connectorOutput = clickedCircuit;
                             parent.latchConnectorUsed();
                         } else if(parent.getConnectorLatchCount() == 1) {
                             // input
-                            System.err.println("Clicked the second circuit");
+                            System.out.println("Clicked the second circuit");
                             connectorInput = clickedCircuit;
                             
                             // done with connector
-                            System.err.println("Done with connection.");
+                            System.out.println("Done with connection.");
                             connectorOutput.setOutputConnectionTo(connectorInput);
                             parent.latchConnectorUsed();
                             
                             repaint();
                         }
                     }
-                } else if(getClickedCircuit(e.getPoint()) != null) {
+                } else if (getClickedCircuit(e.getPoint()) != null) {
+                    System.out.println("Selecting a circuit.");
                     selectedCircuit = getClickedCircuit(e.getPoint());
-                    
-                    if(CircuitsEnum.INPUT.equals(selectedCircuit.getType())) {
-                        final InputCircuit c = (InputCircuit) selectedCircuit;
+                    if (CircuitsEnum.INPUT.equals(selectedCircuit.getType())) {
+                        InputCircuit inputCircuit = (InputCircuit) selectedCircuit;
+                        String string = JOptionPane.showInputDialog("Input value:");
+                        double d = Double.parseDouble(string);
+                        inputCircuit.setValue(d);
                         
-                        addKeyListener(new KeyAdapter() {
-                            public void keyTyped(KeyEvent e) {
-                                if(Character.isDigit(e.getKeyChar())) {
-                                    c.setValue(Short.parseShort(e.getKeyChar() + ""));
-                                }
-                            }
-                        });
+                        repaint();
                     }
+                } else {
+                    selectedCircuit = null;
                 }
             }
         });
+    }
+
+    protected Circuit getSelectedCircuit() {
+        return selectedCircuit;
     }
 
     protected Circuit getClickedCircuit(Point point) {

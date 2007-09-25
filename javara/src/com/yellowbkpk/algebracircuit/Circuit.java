@@ -19,4 +19,6 @@ public interface Circuit {
     CircuitsEnum getType();
 
     double getValue();
+
+    Point getOutputPoint();
 }
