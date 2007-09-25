@@ -35,7 +35,7 @@ public abstract class OneInputCircuit extends BaseCircuit {
         g.drawString(getLabel(), center.x - (RADIUS / 3) + 2, center.y + (RADIUS / 8));
         
         if (inputs[0] != null) {
-            g.drawLine(center.x, center.y, inputs[0].getCenter().x, inputs[0].getCenter().y);
+            g.drawLine(aa.x, center.y, inputs[0].getOutputPoint().x, inputs[0].getOutputPoint().y);
         }
     }
 
