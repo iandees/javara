@@ -17,7 +17,6 @@ public class OutputCircuit extends BaseCircuit {
 
         } else {
             g.drawLine(center.x - (RADIUS / 2), center.y, inputs[0].getOutputPoint().x, inputs[0].getOutputPoint().y);
-            g.drawString(getValue() + "", center.x, center.y);
         }
         
         g.setColor(getBackgroundColor());
@@ -25,6 +24,11 @@ public class OutputCircuit extends BaseCircuit {
         g.setColor(getForegroundColor());
         g.drawRect(center.x - (RADIUS / 2), center.y - (RADIUS / 2), (RADIUS / 2) * 2, (RADIUS / 2) * 2);
         g.setColor(getTextColor());
+        
+        if(inputs[0] != null) {
+            g.setColor(getTextColor());
+            g.drawString(getValue() + "", center.x, center.y);
+        }
     }
 
     public Rectangle getBounds() {
