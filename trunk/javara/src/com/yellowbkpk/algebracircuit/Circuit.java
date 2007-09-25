@@ -11,8 +11,6 @@ public interface Circuit {
 
     Rectangle getBounds();
 
-    void setOutputConnectionTo(Circuit conn);
-
     void addInputConnectionFrom(Circuit conn);
 
     Point getCenter();

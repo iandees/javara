@@ -55,11 +55,6 @@ public abstract class BaseCircuit implements Circuit {
         return label;
     }
 
-    public void setOutputConnectionTo(Circuit conn) {
-        output = conn;
-        conn.addInputConnectionFrom(this);
-    }
-
     public void addInputConnectionFrom(Circuit conn) {
         if ((nInputs + 1) > maxInputs) {
             return;
