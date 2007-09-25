@@ -19,4 +19,8 @@ public class CircuitState {
         return circuits;
     }
 
+    public synchronized void removeAllCircuits() {
+        circuits.clear();
+    }
+
 }

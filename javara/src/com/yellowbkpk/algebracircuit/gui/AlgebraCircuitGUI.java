@@ -47,6 +47,8 @@ public class AlgebraCircuitGUI {
         toolBar.add(new AddCircuitButton(this, CircuitsEnum.NEGATE));
         toolBar.add(new AddCircuitButton(this, CircuitsEnum.MULTIPLY));
         toolBar.add(new AddCircuitButton(this, CircuitsEnum.RECIPROCAL));
+        toolBar.addSeparator();
+        toolBar.add(new ClearScreenButton(this));
         cp.add(toolBar, BorderLayout.PAGE_START);
 
         frame.setContentPane(cp);
@@ -105,5 +107,10 @@ public class AlgebraCircuitGUI {
         connectorDrawLatch = 0;
         
         circuitPanel.updateConnectorLatch();
+    }
+
+    public void clearCircuits() {
+        controller.removeAllCircuits();
+        circuitPanel.repaint();
     }
 }
