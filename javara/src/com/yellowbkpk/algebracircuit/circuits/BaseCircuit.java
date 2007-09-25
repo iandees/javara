@@ -37,6 +37,8 @@ public abstract class BaseCircuit implements Circuit {
 
     public abstract void draw(Graphics g);
 
+    abstract void recomputeShape();
+
     public Color getForegroundColor() {
         return fgColor;
     }
@@ -74,4 +76,21 @@ public abstract class BaseCircuit implements Circuit {
         return type;
     }
 
+    public synchronized void setCenter(Point newCenter) {
+        center = newCenter;
+        recomputeShape();
+    }
+
+    public synchronized void setBackgroundColor(Color b) {
+        bgColor = b;
+    }
+
+    public synchronized void setForegroundColor(Color c) {
+        fgColor = c;
+    }
+
+    public synchronized void setTextColor(Color t) {
+        txColor = t;
+    }
+    
 }

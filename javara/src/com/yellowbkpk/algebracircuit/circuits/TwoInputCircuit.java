@@ -16,7 +16,11 @@ public abstract class TwoInputCircuit extends BaseCircuit {
 
     TwoInputCircuit(CircuitsEnum t, Point c, String l) {
         super(t, c, l, 2);
-
+        
+        recomputeShape();
+    }
+    
+    void recomputeShape() {
         aa = new Point(center.x - (RADIUS / 3), center.y - (RADIUS / 2));
         ab = new Point(center.x + (2 * (RADIUS / 3)), center.y);
         ac = new Point(center.x - (RADIUS / 3), center.y + (RADIUS / 2));

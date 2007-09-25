@@ -17,9 +17,13 @@ public class InputCircuit extends BaseCircuit {
     public InputCircuit(Point c) {
         super(CircuitsEnum.INPUT, c, "", 0);
 
+        recomputeShape();
+    }
+
+    void recomputeShape() {
         aa = new Point(center.x - (RADIUS / 3), center.y - (RADIUS / 2));
         ab = new Point(center.x + (2 * (RADIUS / 3)), center.y);
-        ac = new Point(center.x - (RADIUS / 3), center.y + (RADIUS / 2));
+        ac = new Point(center.x - (RADIUS / 3), center.y + (RADIUS / 2));        
     }
 
     public void draw(Graphics g) {

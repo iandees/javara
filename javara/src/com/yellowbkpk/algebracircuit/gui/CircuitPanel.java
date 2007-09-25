@@ -1,10 +1,12 @@
 package com.yellowbkpk.algebracircuit.gui;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -21,6 +23,9 @@ public class CircuitPanel extends JPanel {
     private AlgebraCircuitGUI parent;
     private CircuitState controller;
     private Circuit selectedCircuit;
+    
+    private Point dragStart;
+    private Point circuitDragStart;
 
     public CircuitPanel(AlgebraCircuitGUI parentGUI, CircuitState state) {
         super();
@@ -31,7 +36,20 @@ public class CircuitPanel extends JPanel {
         addMouseListener(new MouseAdapter() {
             private Circuit connectorOutput;
             private Circuit connectorInput;
-            private Circuit selectedCircuit;
+
+            public void mousePressed(MouseEvent e) {
+                if(selectedCircuit != null) {
+                    System.out.println("Mouse pressed on " + selectedCircuit);
+                    circuitDragStart = selectedCircuit.getCenter();
+                    dragStart = e.getPoint();
+                }
+            }
+
+            public void mouseReleased(MouseEvent e) {
+                // Drag is finished
+                circuitDragStart = null;
+                dragStart = null;
+            }
 
             public void mouseClicked(MouseEvent e) {
                 if (parent.getLatchType() != null) {
@@ -69,19 +87,55 @@ public class CircuitPanel extends JPanel {
                             repaint();
                         }
                     }
-                } else if (getClickedCircuit(e.getPoint()) != null) {
-                    System.out.println("Selecting a circuit.");
-                    selectedCircuit = getClickedCircuit(e.getPoint());
-                    if (CircuitsEnum.INPUT.equals(selectedCircuit.getType())) {
-                        InputCircuit inputCircuit = (InputCircuit) selectedCircuit;
+                } else if (e.getClickCount() == 2 && getClickedCircuit(e.getPoint()) != null) {
+                    System.out.println("Changing an input circuit value.");
+                    Circuit selectedInputCircuit = getClickedCircuit(e.getPoint());
+                    if (CircuitsEnum.INPUT.equals(selectedInputCircuit.getType())) {
+                        InputCircuit inputCircuit = (InputCircuit) selectedInputCircuit;
                         String string = JOptionPane.showInputDialog("Input value:");
-                        double d = Double.parseDouble(string);
-                        inputCircuit.setValue(d);
+                        if (string != null) {
+                            double d = Double.parseDouble(string);
+                            inputCircuit.setValue(d);
+
+                            repaint();
+                        }
+                    }
+                } else if (getClickedCircuit(e.getPoint()) != null) {
+                    Circuit recentlyClickedCircuit = getClickedCircuit(e.getPoint());
+                    
+                    // If there already was a circuit selected, change the old one's color back
+                    if(selectedCircuit != null && selectedCircuit != recentlyClickedCircuit) {
+                        // Change the previously selected circuit back to regular colors
+                        selectedCircuit.setForegroundColor(Color.black);
+                    }
+                    
+                    System.out.println("Selecting a circuit.");
+                    selectedCircuit = recentlyClickedCircuit;
+                    
+                    // Highlight the selected circuit
+                    selectedCircuit.setForegroundColor(Color.red);
+                    repaint();
+                } else {
+                    if (selectedCircuit != null) {
+                        // Change the selected circuit back to regular colors
+                        selectedCircuit.setForegroundColor(Color.black);
+
+                        // Then "deselect" from memory
+                        selectedCircuit = null;
                         
                         repaint();
                     }
-                } else {
-                    selectedCircuit = null;
+                }
+            }
+        });
+        
+        addMouseMotionListener(new MouseMotionAdapter() {
+            public void mouseDragged(MouseEvent e) {
+                if (selectedCircuit != null) {
+                    Point newCenter = new Point(circuitDragStart.x + (e.getPoint().x - dragStart.x),
+                            circuitDragStart.y + (e.getPoint().y - dragStart.y));
+                    selectedCircuit.setCenter(newCenter);
+                    repaint();
                 }
             }
         });
