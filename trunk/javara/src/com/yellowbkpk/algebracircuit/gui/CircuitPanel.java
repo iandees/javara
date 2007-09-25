@@ -71,11 +71,25 @@ public class CircuitPanel extends JPanel {
                     } else {
                         if(parent.getConnectorLatchCount() == 2) {
                             // output
+                            
+                            if(CircuitsEnum.OUTPUT.equals(clickedCircuit.getType())) {
+                                // The output circuit element doesn't have any outputs
+                                parent.latchConnectorReset();
+                                return;
+                            }
+
                             System.out.println("Clicked the first circuit.");
                             connectorOutput = clickedCircuit;
+                            
                             parent.latchConnectorUsed();
                         } else if(parent.getConnectorLatchCount() == 1) {
                             // input
+                            if (clickedCircuit == connectorOutput) {
+                                // Can't connect the input and output together
+                                // on the same circuit element
+                                return;
+                            }
+                            
                             System.out.println("Clicked the second circuit");
                             connectorInput = clickedCircuit;
                             
@@ -159,6 +173,7 @@ public class CircuitPanel extends JPanel {
         if (parent.getLatchType() == null) {
             setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         } else {
+            parent.latchConnectorReset();
             setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
         }
     }
