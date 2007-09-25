@@ -14,7 +14,7 @@ public class NegationCircuit extends OneInputCircuit {
         if(inputs[0] != null) {
             return -inputs[0].getValue();
         } else {
-            return Short.MIN_VALUE;
+            return Double.NaN;
         }
     }
 

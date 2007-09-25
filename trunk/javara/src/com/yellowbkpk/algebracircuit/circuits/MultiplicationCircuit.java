@@ -14,7 +14,7 @@ public class MultiplicationCircuit extends TwoInputCircuit {
         if(inputs[0] != null && inputs[1] != null) {
             return (inputs[0].getValue() * inputs[1].getValue());
         } else {
-            return Short.MIN_VALUE;
+            return Double.NaN;
         }
     }
     

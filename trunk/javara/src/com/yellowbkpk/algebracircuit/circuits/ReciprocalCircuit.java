@@ -14,7 +14,7 @@ public class ReciprocalCircuit extends OneInputCircuit {
         if(inputs[0] != null) {
             return 1.0/inputs[0].getValue();
         } else {
-            return Short.MIN_VALUE;
+            return Double.NaN;
         }
     }
 
