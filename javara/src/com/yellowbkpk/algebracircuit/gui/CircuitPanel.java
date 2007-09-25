@@ -81,7 +81,7 @@ public class CircuitPanel extends JPanel {
                             
                             // done with connector
                             System.out.println("Done with connection.");
-                            connectorOutput.setOutputConnectionTo(connectorInput);
+                            connectorInput.addInputConnectionFrom(connectorOutput);
                             parent.latchConnectorUsed();
                             
                             repaint();
