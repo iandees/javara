@@ -97,7 +97,8 @@ public class CircuitPanel extends JPanel {
                             System.out.println("Done with connection.");
                             connectorInput.addInputConnectionFrom(connectorOutput);
                             parent.latchConnectorUsed();
-                            
+
+                            controller.resetAllPassCounts();
                             repaint();
                         }
                     }
@@ -111,6 +112,7 @@ public class CircuitPanel extends JPanel {
                             double d = Double.parseDouble(string);
                             inputCircuit.setValue(d);
 
+                            controller.resetAllPassCounts();
                             repaint();
                         }
                     }

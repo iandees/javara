@@ -12,8 +12,6 @@ public class InputCircuit extends BaseCircuit {
     private Point aa;
     private Point ab;
     private Point ac;
-    private double value;
-
     public InputCircuit(Point c) {
         super(CircuitsEnum.INPUT, c, "", 0);
 

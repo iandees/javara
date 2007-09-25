@@ -11,8 +11,14 @@ public class ReciprocalCircuit extends OneInputCircuit {
     }
 
     public double getValue() {
-        if(inputs[0] != null) {
-            return 1.0/inputs[0].getValue();
+        if (inputs[0] != null) {
+            if (nPasses < RECURSIVE_CUTOFF) {
+                nPasses++;
+                value = (1.0/inputs[0].getValue());
+                return value;
+            } else {
+                return value;
+            }
         } else {
             return Double.NaN;
         }
