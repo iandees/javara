@@ -1,5 +1,6 @@
 package com.yellowbkpk.algebracircuit;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -21,4 +22,12 @@ public interface Circuit {
     double getValue();
 
     Point getOutputPoint();
+
+    void setCenter(Point newCenter);
+
+    void setForegroundColor(Color c);
+    
+    void setBackgroundColor(Color b);
+    
+    void setTextColor(Color t);
 }

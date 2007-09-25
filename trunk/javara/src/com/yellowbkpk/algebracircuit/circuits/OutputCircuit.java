@@ -11,6 +11,9 @@ public class OutputCircuit extends BaseCircuit {
     public OutputCircuit(Point c) {
         super(CircuitsEnum.OUTPUT, c, "", 1);
     }
+    
+    void recomputeShape() {
+    }
 
     public void draw(Graphics g) {
         if (inputs[0] == null) {
