@@ -22,5 +22,11 @@ public class CircuitState {
     public synchronized void removeAllCircuits() {
         circuits.clear();
     }
+    
+    public synchronized void resetAllPassCounts() {
+        for (Circuit circuit : circuits) {
+            circuit.resetPasses();
+        }
+    }
 
 }
