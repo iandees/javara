@@ -73,12 +73,6 @@ public class CircuitPanel extends JPanel {
                         if(parent.getConnectorLatchCount() == 2) {
                             // output
                             
-                            if(CircuitsEnum.OUTPUT.equals(clickedCircuit.getType())) {
-                                // The output circuit element doesn't have any outputs
-                                parent.latchConnectorReset();
-                                return;
-                            }
-
                             System.out.println("Clicked the first circuit.");
                             connectorOutput = clickedCircuit;
                             

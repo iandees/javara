@@ -43,7 +43,7 @@ public class OutputCircuit extends BaseCircuit {
     }
 
     public Point getOutputPoint() {
-        return null;
+        return new Point(center.x + (RADIUS / 2), center.y);
     }
 
 }
