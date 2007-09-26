@@ -13,7 +13,7 @@ public abstract class TwoInputCircuit extends BaseCircuit {
     private Point aa;
     private Point ab;
     private Point ac;
-    
+
     TwoInputCircuit(CircuitsEnum t, Point c, String l) {
         super(t, c, l, 2);
         

@@ -60,6 +60,7 @@ public class CircuitPanel extends JPanel {
                         controller.addCircuit(circ);
                         parent.latchCircuitType(null);
                         updateLatch();
+                        
                         repaint();
                     }
                 } else if(parent.getConnectorLatchCount() > 0) {
@@ -98,7 +99,6 @@ public class CircuitPanel extends JPanel {
                             connectorInput.addInputConnectionFrom(connectorOutput);
                             parent.latchConnectorUsed();
 
-                            controller.resetAllPassCounts();
                             repaint();
                         }
                     }
@@ -112,7 +112,6 @@ public class CircuitPanel extends JPanel {
                             double d = Double.parseDouble(string);
                             inputCircuit.setValue(d);
 
-                            controller.resetAllPassCounts();
                             repaint();
                         }
                     }
@@ -130,6 +129,7 @@ public class CircuitPanel extends JPanel {
                     
                     // Highlight the selected circuit
                     selectedCircuit.setForegroundColor(Color.red);
+
                     repaint();
                 } else {
                     if (selectedCircuit != null) {
@@ -138,7 +138,7 @@ public class CircuitPanel extends JPanel {
 
                         // Then "deselect" from memory
                         selectedCircuit = null;
-                        
+
                         repaint();
                     }
                 }
