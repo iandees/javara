@@ -10,7 +10,6 @@ import com.yellowbkpk.algebracircuit.CircuitsEnum;
 public abstract class BaseCircuit implements Circuit {
 
     protected static final int RADIUS = 50;
-    protected static final int RECURSIVE_CUTOFF = 2;
     protected Point center;
     private CircuitsEnum type;
     private Color fgColor;
@@ -21,8 +20,6 @@ public abstract class BaseCircuit implements Circuit {
     protected Circuit output;
     private int nInputs;
     private int maxInputs;
-    protected int nPasses;
-    protected double value;
 
     BaseCircuit(CircuitsEnum t, Point c, String l, int n) {
         center = c;
@@ -30,8 +27,6 @@ public abstract class BaseCircuit implements Circuit {
         nInputs = 0;
         maxInputs = n;
         inputs = new Circuit[n];
-        nPasses = 0;
-        value = Double.NaN;
 
         label = l;
 
@@ -91,13 +86,6 @@ public abstract class BaseCircuit implements Circuit {
 
     public synchronized void setTextColor(Color t) {
         txColor = t;
-    }
-    
-    public synchronized void resetPasses() {
-        nPasses = 0;
-        if (!CircuitsEnum.INPUT.equals(getType())) {
-            value = 1.0;
-        }
     }
     
 }

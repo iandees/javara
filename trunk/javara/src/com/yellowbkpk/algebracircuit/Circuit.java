@@ -28,6 +28,4 @@ public interface Circuit {
     void setBackgroundColor(Color b);
     
     void setTextColor(Color t);
-    
-    void resetPasses();
 }
