@@ -70,6 +70,14 @@ public class GLatLngBounds {
     public String toString() {
         return northwest.toString() + "," + southeast.toString();
     }
+
+    /**
+     * @return
+     */
+    public GLatLng getCenter() {
+        return new GLatLng(northwest.getLatitude() - (northwest.getLatitude() - southeast.getLatitude()),
+                northwest.getLongitude() - (northwest.getLongitude() - southeast.getLongitude()));
+    }
     
     
 }

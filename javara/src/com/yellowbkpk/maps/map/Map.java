@@ -18,20 +18,13 @@ public class Map implements OverlayUpdateListener {
         mapUpdateListener = new ArrayList<MapUpdateListener>();
     }
 
-    /**
-     * @param dot
-     */
-    public void addOverlay(GOverlay dot) {
+    public synchronized void addOverlay(GOverlay dot) {
         dot.registerForUpdates(this);
         overlays.add(dot);
         notifyMapUpdate();
     }
 
-    /**
-     * @param bounds
-     * @return 
-     */
-    public Collection<GOverlay> getOverlays(GLatLngBounds bounds) {
+    public synchronized Collection<GOverlay> getOverlays(GLatLngBounds bounds) {
         Collection<GOverlay> ov = new ArrayList<GOverlay>();
         
         for (GOverlay overlay : overlays) {
@@ -43,10 +36,7 @@ public class Map implements OverlayUpdateListener {
         return ov;
     }
 
-    /**
-     * @param mapDisplayPanel
-     */
-    public void registerForUpdates(MapUpdateListener listener) {
+    public synchronized void registerForUpdates(MapUpdateListener listener) {
         mapUpdateListener.add(listener);
     }
 
@@ -54,10 +44,7 @@ public class Map implements OverlayUpdateListener {
         notifyMapUpdate();
     }
 
-    /**
-     * 
-     */
-    private void notifyMapUpdate() {
+    private synchronized void notifyMapUpdate() {
         for (MapUpdateListener listener : mapUpdateListener) {
             listener.mapUpdated();
         }

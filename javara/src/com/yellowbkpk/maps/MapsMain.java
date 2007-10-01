@@ -19,6 +19,7 @@ import javax.comm.PortInUseException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -37,6 +38,7 @@ public class MapsMain {
     private static GOverlayLayer layer;
     private static int coverageZoom = 5;
     protected static HashMap<String,Thread> downloads;
+    protected static RadarOverlayLayer radarLayer;
 
     public static void main(String[] args) {
         /*// Modify system properties
@@ -128,6 +130,20 @@ public class MapsMain {
             }
         });
         fileMenu.add(enableNetConnectionItem);
+        final JCheckBoxMenuItem enableRadarItem = new JCheckBoxMenuItem("Enable Radar Layer");
+        enableRadarItem.setState(false);
+        enableRadarItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (enableRadarItem.getState()) {
+                    enableRadarItem.setState(true);
+                    radarLayer.setVisible(true);
+                } else {
+                    enableRadarItem.setState(false);
+                    radarLayer.setVisible(false);
+                }
+            }
+        });
+        fileMenu.add(enableRadarItem);
         menuBar.add(fileMenu );
         frame.setJMenuBar(menuBar);
         
@@ -146,6 +162,10 @@ public class MapsMain {
         layer = new GOverlayLayer();
         map.addOverlay(layer);
         //updateCoverageOverlay();
+        
+        radarLayer = new RadarOverlayLayer();
+        radarLayer.setVisible(false);
+        map.addOverlay(radarLayer);
         
         panel.addMapMouseListener(new MapMouseListener() {
             public void mouseClicked(GLatLng latLng, int clickCount) {

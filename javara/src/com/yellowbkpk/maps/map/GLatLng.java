@@ -30,4 +30,10 @@ public class GLatLng {
         longitude = lng;
     }
 
+    public double distanceTo(GLatLng other) {
+        double dlat = (other.latitude - latitude);
+        double dlng = (other.longitude - longitude);
+        return Math.sqrt(dlat*dlat + dlng*dlng);
+    }
+
 }
