@@ -10,12 +10,8 @@ public class AdditionCircuit extends TwoInputCircuit {
         super(CircuitsEnum.ADD, c, "ADD");
     }
 
-    public double getValue() {
-        if(inputs[0] != null && inputs[1] != null) {
-            return (inputs[0].getValue() + inputs[1].getValue());
-        } else {
-            return Double.NaN;
-        }
-    }
+	public double getUpdatedValue() {
+		return (inputs[0].getValue() + inputs[1].getValue());
+	}
     
 }

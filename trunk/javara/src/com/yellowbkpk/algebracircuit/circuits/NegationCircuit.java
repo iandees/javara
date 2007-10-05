@@ -10,12 +10,8 @@ public class NegationCircuit extends OneInputCircuit {
         super(CircuitsEnum.NEGATE, c, "NEG");
     }
 
-    public double getValue() {
-        if(inputs[0] != null) {
-            return -inputs[0].getValue();
-        } else {
-            return Double.NaN;
-        }
-    }
+	public double getUpdatedValue() {
+		return -(inputs[0].getValue());
+	}
 
 }

@@ -12,7 +12,6 @@ public class InputCircuit extends BaseCircuit {
     private Point aa;
     private Point ab;
     private Point ac;
-    private double value;
 
     public InputCircuit(Point c) {
         super(CircuitsEnum.INPUT, c, "", 0);
@@ -48,12 +47,12 @@ public class InputCircuit extends BaseCircuit {
         value = d;
     }
 
-    public double getValue() {
-        return value;
-    }
-
     public Point getOutputPoint() {
         return ab;
     }
+
+	public double getUpdatedValue() {
+		return value;
+	}
     
 }

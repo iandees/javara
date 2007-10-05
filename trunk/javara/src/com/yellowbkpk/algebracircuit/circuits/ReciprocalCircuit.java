@@ -10,12 +10,8 @@ public class ReciprocalCircuit extends OneInputCircuit {
         super(CircuitsEnum.RECIPROCAL, c, "RECIP");
     }
 
-    public double getValue() {
-        if(inputs[0] != null) {
-            return 1.0/inputs[0].getValue();
-        } else {
-            return Double.NaN;
-        }
-    }
+	public double getUpdatedValue() {
+		return 1.0 / inputs[0].getValue();
+	}
 
 }
