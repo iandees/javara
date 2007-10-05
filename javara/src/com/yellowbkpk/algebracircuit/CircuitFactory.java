@@ -3,6 +3,7 @@ package com.yellowbkpk.algebracircuit;
 import java.awt.Point;
 
 import com.yellowbkpk.algebracircuit.circuits.AdditionCircuit;
+import com.yellowbkpk.algebracircuit.circuits.Circuit;
 import com.yellowbkpk.algebracircuit.circuits.InputCircuit;
 import com.yellowbkpk.algebracircuit.circuits.MultiplicationCircuit;
 import com.yellowbkpk.algebracircuit.circuits.NegationCircuit;

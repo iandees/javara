@@ -38,12 +38,16 @@ public class OutputCircuit extends BaseCircuit {
         return new Rectangle(center.x - (RADIUS / 2), center.y - (RADIUS / 2), RADIUS, RADIUS);
     }
 
-    public double getValue() {
-        return inputs[0].getValue();
-    }
-
     public Point getOutputPoint() {
         return new Point(center.x + (RADIUS / 2), center.y);
     }
+
+	double getUpdatedValue() {
+		if (inputs[0] == null) {
+			return Double.NaN;
+		} else {
+			return inputs[0].getValue();
+		}
+	}
 
 }

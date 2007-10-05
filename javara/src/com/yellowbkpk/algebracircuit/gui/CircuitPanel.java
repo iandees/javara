@@ -12,10 +12,10 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import com.yellowbkpk.algebracircuit.Circuit;
 import com.yellowbkpk.algebracircuit.CircuitFactory;
 import com.yellowbkpk.algebracircuit.CircuitState;
 import com.yellowbkpk.algebracircuit.CircuitsEnum;
+import com.yellowbkpk.algebracircuit.circuits.Circuit;
 import com.yellowbkpk.algebracircuit.circuits.InputCircuit;
 
 public class CircuitPanel extends JPanel {
@@ -93,6 +93,7 @@ public class CircuitPanel extends JPanel {
                             connectorInput.addInputConnectionFrom(connectorOutput);
                             parent.latchConnectorUsed();
 
+                            controller.updateCircuitsToSteadyState();
                             repaint();
                         }
                     }
@@ -106,6 +107,7 @@ public class CircuitPanel extends JPanel {
                             double d = Double.parseDouble(string);
                             inputCircuit.setValue(d);
 
+                            controller.updateCircuitsToSteadyState();
                             repaint();
                         }
                     }

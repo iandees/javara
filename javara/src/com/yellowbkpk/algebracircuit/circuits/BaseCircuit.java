@@ -4,22 +4,28 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 
-import com.yellowbkpk.algebracircuit.Circuit;
 import com.yellowbkpk.algebracircuit.CircuitsEnum;
 
 public abstract class BaseCircuit implements Circuit {
 
     protected static final int RADIUS = 50;
+	private static final double STEADY_STATE_CUTOFF = 0.0001;
+    
     protected Point center;
     private CircuitsEnum type;
+    
     private Color fgColor;
     private Color bgColor;
     private Color txColor;
     private String label;
+    
     protected Circuit[] inputs;
-    protected Circuit output;
     private int nInputs;
     private int maxInputs;
+    
+    protected double value;
+    protected double oldValue;
+	private boolean steadyState;
 
     BaseCircuit(CircuitsEnum t, Point c, String l, int n) {
         center = c;
@@ -27,6 +33,10 @@ public abstract class BaseCircuit implements Circuit {
         nInputs = 0;
         maxInputs = n;
         inputs = new Circuit[n];
+        
+        value = 0.8814;
+        oldValue = 0.2501;
+        steadyState = false;
 
         label = l;
 
@@ -38,7 +48,9 @@ public abstract class BaseCircuit implements Circuit {
     public abstract void draw(Graphics g);
 
     abstract void recomputeShape();
-
+    
+    abstract double getUpdatedValue();
+    
     public Color getForegroundColor() {
         return fgColor;
     }
@@ -88,4 +100,39 @@ public abstract class BaseCircuit implements Circuit {
         txColor = t;
     }
     
+    public void step() {
+    	if(isFullyConnected()) {
+    		oldValue = value;
+        	value = (getUpdatedValue() + oldValue) / 2.0;
+        	
+        	if(Math.abs(value - oldValue) < STEADY_STATE_CUTOFF) {
+        		steadyState  = true;
+        	}
+    	}
+    }
+    
+    public double getValue() {
+    	return value;
+    }
+    
+	public boolean isSteady() {
+		return steadyState;
+	}
+	
+	public void resetSteadyState() {
+		oldValue = 1.0;
+		steadyState = false;
+	}
+
+	private boolean isFullyConnected() {
+		if(maxInputs == 2) {
+			return (inputs[0] != null && inputs[1] != null);
+		} else if(maxInputs == 1) {
+			return (inputs[0] != null);
+		} else if(maxInputs == 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
