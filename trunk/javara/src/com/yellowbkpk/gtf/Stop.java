@@ -97,15 +97,32 @@ public class Stop implements Serializable {
 		b.append(",");
 		b.append(stopName);
 		b.append(",");
-		b.append(stopDesc);
+		
+		if (stopDesc == null) {
+			b.append("");
+		} else {
+			b.append(stopDesc);
+		}
+		
 		b.append(",");
 		b.append(stopLat);
 		b.append(",");
 		b.append(stopLon);
 		b.append(",");
-		b.append(zoneId);
+		
+		if (zoneId == null) {
+			b.append("");
+		} else {
+			b.append(zoneId);
+		}
+		
 		b.append(",");
-		b.append(stopURL);
+		
+		if (stopURL == null) {
+			b.append("");
+		} else {
+			b.append(stopURL);
+		}
 
 		return b.toString();
 	}

@@ -130,7 +130,7 @@ public class StopTime implements Serializable {
 
 	public String toString() {
 		StringBuffer b = new StringBuffer();
-		
+
 		b.append(tripId.getTripId());
 		b.append(",");
 		b.append(arrivalTime);
@@ -141,14 +141,37 @@ public class StopTime implements Serializable {
 		b.append(",");
 		b.append(stopSequence);
 		b.append(",");
-		b.append(stopHeadsign);
+
+		if (stopHeadsign == null) {
+			b.append("");
+		} else {
+			b.append(stopHeadsign);
+		}
+
 		b.append(",");
-		b.append(pickupType);
+
+		if (pickupType == null) {
+			b.append("");
+		} else {
+			b.append(pickupType);
+		}
+
 		b.append(",");
-		b.append(dropOffType);
+
+		if (dropOffType == null) {
+			b.append("");
+		} else {
+			b.append(dropOffType);
+		}
+
 		b.append(",");
-		b.append(shapeDistTraveled);
-		
+
+		if (pickupType == null) {
+			b.append("");
+		} else {
+			b.append(shapeDistTraveled);
+		}
+
 		return b.toString();
 	}
 

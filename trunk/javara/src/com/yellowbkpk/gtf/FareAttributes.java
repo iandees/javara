@@ -35,9 +35,9 @@ public class FareAttributes implements Serializable {
 	 *            The transfer_duration field specifies the length of time in
 	 *            seconds before a transfer expires.
 	 */
-	public FareAttributes(FareAttributes fareId, Double price, Currency currencyType,
-			PaymentMethodEnum paymentMethod, Integer transfers,
-			Integer transferDuration) {
+	public FareAttributes(FareAttributes fareId, Double price,
+			Currency currencyType, PaymentMethodEnum paymentMethod,
+			Integer transfers, Integer transferDuration) {
 		this.fareId = fareId;
 		this.price = price;
 		this.currencyType = currencyType;
@@ -72,7 +72,7 @@ public class FareAttributes implements Serializable {
 
 	public String toString() {
 		StringBuffer b = new StringBuffer();
-		
+
 		b.append(fareId.getFareId());
 		b.append(",");
 		b.append(price);
@@ -81,8 +81,13 @@ public class FareAttributes implements Serializable {
 		b.append(",");
 		b.append(transfers);
 		b.append(",");
-		b.append(transferDuration);
-		
+
+		if (transferDuration == null) {
+			b.append("");
+		} else {
+			b.append(transferDuration);
+		}
+
 		return b.toString();
 	}
 }

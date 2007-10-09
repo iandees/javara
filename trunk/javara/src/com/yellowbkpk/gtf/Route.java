@@ -68,10 +68,12 @@ public class Route implements Serializable {
 	public Route(String routeId, String agencyId, String routeShortName,
 			String routeLongName, String routeDesc, RouteTypeEnum routeType,
 			URL routeURL, Color routeColor, Color routeTextColor) {
-		if(routeId == null || routeShortName == null || routeLongName == null || routeType == null) {
-			throw new IllegalArgumentException("RouteID, routeShortName, routeLongName, and routeType are required attributes.");
+		if (routeId == null || routeShortName == null || routeLongName == null
+				|| routeType == null) {
+			throw new IllegalArgumentException(
+					"RouteID, routeShortName, routeLongName, and routeType are required attributes.");
 		}
-		
+
 		this.routeId = routeId;
 		this.agencyId = agencyId;
 		this.routeShortName = routeShortName;
@@ -121,25 +123,54 @@ public class Route implements Serializable {
 
 	public String toString() {
 		StringBuffer b = new StringBuffer();
-		
+
 		b.append(routeId);
 		b.append(",");
-		b.append(agencyId);
+
+		if (agencyId == null) {
+			b.append("");
+		} else {
+			b.append(agencyId);
+		}
+
 		b.append(",");
 		b.append(routeShortName);
 		b.append(",");
 		b.append(routeLongName);
 		b.append(",");
-		b.append(routeDesc);
+
+		if (routeDesc == null) {
+			b.append("");
+		} else {
+			b.append(routeDesc);
+		}
+
 		b.append(",");
-		b.append(routeType.getType());
+		b.append(routeType);
 		b.append(",");
-		b.append(routeURL);
+
+		if (routeURL == null) {
+			b.append("");
+		} else {
+			b.append(routeURL);
+		}
+
 		b.append(",");
-		b.append(routeColor);
+
+		if (routeColor == null) {
+			b.append("");
+		} else {
+			b.append(routeColor);
+		}
+
 		b.append(",");
-		b.append(routeTextColor);
-		
+
+		if (routeTextColor == null) {
+			b.append("");
+		} else {
+			b.append(routeTextColor);
+		}
+
 		return b.toString();
 	}
 
