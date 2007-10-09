@@ -74,7 +74,7 @@ public class Shape implements Serializable {
 
 	public String toString() {
 		StringBuffer b = new StringBuffer();
-		
+
 		b.append(shapeId);
 		b.append(",");
 		b.append(shapePtLat);
@@ -83,8 +83,13 @@ public class Shape implements Serializable {
 		b.append(",");
 		b.append(shapePtSequence);
 		b.append(",");
-		b.append(shapeDistTraveled);
-		
+
+		if (shapeDistTraveled == null) {
+			b.append("");
+		} else {
+			b.append(shapeDistTraveled);
+		}
+
 		return b.toString();
 	}
 

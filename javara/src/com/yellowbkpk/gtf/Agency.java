@@ -2,6 +2,7 @@ package com.yellowbkpk.gtf;
 
 import java.io.Serializable;
 import java.net.URL;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public class Agency implements Serializable {
@@ -12,7 +13,7 @@ public class Agency implements Serializable {
 	private final String agencyName;
 	private final URL agencyURL;
 	private final TimeZone agencyTimezone;
-	private String agencyLang;
+	private Locale agencyLang;
 	
 	/**
 	 * This file contains information about the transit agency.
@@ -38,7 +39,7 @@ public class Agency implements Serializable {
 	 *            transit agency is located. Please refer to
 	 *            http://en.wikipedia.org/wiki/List_of_tz_zones for a list of
 	 *            valid values.
-	 * @param agencyLang
+	 * @param locale
 	 *            The agency_lang field contains a two-letter ISO 639-1 code for
 	 *            the primary language used by this transit agency. This setting
 	 *            defines capitalization rules and other language-specific
@@ -48,7 +49,7 @@ public class Agency implements Serializable {
 	 *            list of valid values.
 	 */
 	public Agency(String agencyId, String agencyName, URL agencyURL,
-			TimeZone agencyTimezone, String agencyLang) {
+			TimeZone agencyTimezone, Locale locale) {
 		if(agencyName == null || agencyURL == null || agencyTimezone == null) {
 			throw new IllegalArgumentException("Name, URL, and Timezone are required attributes.");
 		}
@@ -57,7 +58,7 @@ public class Agency implements Serializable {
 		this.agencyName = agencyName;
 		this.agencyURL = agencyURL;
 		this.agencyTimezone = agencyTimezone;
-		this.agencyLang = agencyLang;
+		this.agencyLang = locale;
 	}
 
 	public String getAgencyId() {
@@ -76,22 +77,32 @@ public class Agency implements Serializable {
 		return agencyTimezone;
 	}
 
-	public String getAgencyLang() {
+	public Locale getAgencyLang() {
 		return agencyLang;
 	}
 
 	public String toString() {
 		StringBuffer b = new StringBuffer();
 		
-		b.append(agencyId);
+		if (agencyId == null) {
+			b.append("");
+		} else {
+			b.append(agencyId);
+		}
+		
 		b.append(",");
 		b.append(agencyName);
 		b.append(",");
 		b.append(agencyURL);
 		b.append(",");
-		b.append(agencyTimezone);
+		b.append(agencyTimezone.getID());
 		b.append(",");
-		b.append(agencyLang);
+		
+		if (agencyLang == null) {
+			b.append("");
+		} else {
+			b.append(agencyLang.getISO3Language());
+		}
 		
 		return b.toString();
 	}

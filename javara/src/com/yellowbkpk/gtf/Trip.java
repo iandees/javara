@@ -102,21 +102,44 @@ public class Trip implements Serializable {
 
 	public String toString() {
 		StringBuffer b = new StringBuffer();
-		
+
 		b.append(routeId.getRouteId());
 		b.append(",");
 		b.append(serviceId.getServiceId());
 		b.append(",");
 		b.append(tripId);
 		b.append(",");
-		b.append(tripHeadsign);
+
+		if (tripHeadsign == null) {
+			b.append("");
+		} else {
+			b.append(tripHeadsign);
+		}
+
 		b.append(",");
-		b.append(directionId);
+
+		if (directionId == null) {
+			b.append("");
+		} else {
+			b.append(directionId);
+		}
+
 		b.append(",");
-		b.append(blockId);
+
+		if (blockId == null) {
+			b.append("");
+		} else {
+			b.append(blockId);
+		}
+
 		b.append(",");
-		b.append(shapeId.getShapeId());
-		
+
+		if (shapeId == null) {
+			b.append("");
+		} else {
+			b.append(shapeId.getShapeId());
+		}
+
 		return b.toString();
 	}
 

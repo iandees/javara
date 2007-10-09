@@ -63,17 +63,40 @@ public class FareRule implements Serializable {
 
 	public String toString() {
 		StringBuffer b = new StringBuffer();
-		
+
 		b.append(fare.getFareId());
 		b.append(",");
-		b.append(route.getRouteId());
+
+		if (route == null) {
+			b.append("");
+		} else {
+			b.append(route.getRouteId());
+		}
+
 		b.append(",");
-		b.append(origin.getZoneId());
+
+		if (origin == null) {
+			b.append("");
+		} else {
+			b.append(origin.getZoneId());
+		}
+
 		b.append(",");
-		b.append(destination.getZoneId());
+
+		if (destination == null) {
+			b.append("");
+		} else {
+			b.append(destination.getZoneId());
+		}
+
 		b.append(",");
-		b.append(contains.getZoneId());
-		
+
+		if (contains == null) {
+			b.append("");
+		} else {
+			b.append(contains.getZoneId());
+		}
+
 		return b.toString();
 	}
 }
