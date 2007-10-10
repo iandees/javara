@@ -6,7 +6,7 @@ import java.io.IOException;
 public class DBFRecord {
 
     private DBFField field;
-    private byte recordDeleted;
+    private int recordDeleted;
     private byte[] data;
     private boolean valid = true;
 
@@ -17,15 +17,16 @@ public class DBFRecord {
         this.field = field;
         
         try {
-            recordDeleted = bis.readByte();
+            recordDeleted = bis.readUnsignedByte();
             
             if(recordDeleted == 0x1A) {
                 valid = false;
                 return;
             }
             
-            data = new byte[field.getFieldLength()];
+            data = new byte[field.getFieldLength() - 1];
             bis.readFully(data);
+            System.out.println(field + " (" + field.getFieldLength() + ") => " + getData());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -44,6 +45,6 @@ public class DBFRecord {
     }
 
     public String getData() {
-        return new String(data).trim();
+        return new String(data);
     }
 }
