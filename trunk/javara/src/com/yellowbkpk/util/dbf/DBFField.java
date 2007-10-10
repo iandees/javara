@@ -5,12 +5,11 @@ import java.io.IOException;
 
 public class DBFField {
 
-    private byte[] firstByte = new byte[1];
+    private int firstByte;
     private byte[] fieldName = new byte[10];
-    private byte[] fieldType = new byte[1];
+    private int fieldType;
     private int fieldLength;
     private int decimalCount;
-    private byte[] indexField = new byte[1];
     private boolean valid = true;
     
     /**
@@ -18,24 +17,24 @@ public class DBFField {
      */
     public DBFField(DataInputStream bis) {
         try {
-            bis.read(firstByte);
+            firstByte = bis.readUnsignedByte();
             
-            if(firstByte[0] == 0x0D) {
+            if(firstByte == 0x0D) {
                 valid = false;
                 return;
             }
             
-            bis.read(fieldName);
-            bis.read(fieldType);
-            bis.skip(4); // Field data address
+            bis.readFully(fieldName);
+            fieldType = bis.readUnsignedByte();
+            bis.skipBytes(4); // Field data address
             fieldLength = bis.readUnsignedByte();
             decimalCount = bis.readUnsignedByte();
-            bis.skip(2); // Reserved for multi-user
-            bis.skip(1); // Work area ID
-            bis.skip(2); // Reserved for multi-user
-            bis.skip(1); // Flag for set fields
-            bis.skip(7); // Reserved
-            bis.read(indexField);
+            bis.skipBytes(2); // Reserved for multi-user
+            bis.skipBytes(1); // Work area ID
+            bis.skipBytes(2); // Reserved for multi-user
+            bis.skipBytes(1); // Flag for set fields
+            bis.skipBytes(7); // Reserved
+            bis.skipBytes(1); // Index field
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -56,7 +55,7 @@ public class DBFField {
      * @return
      */
     public String getName() {
-        return (new String(firstByte) + new String(fieldName)).trim();
+        return (String.valueOf((char)firstByte) + new String(fieldName)).trim();
     }
 
     /**

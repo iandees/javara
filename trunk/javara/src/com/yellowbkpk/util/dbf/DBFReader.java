@@ -15,20 +15,24 @@ public class DBFReader {
     public DBFReader(InputStream stream) {
         DataInputStream bis = new DataInputStream(stream);
         
+        System.out.println("--Start--");
         // Parse the header information
         header = new DBFHeader(bis);
         List<DBFField> fields = header.getFields();
+        System.out.println("--Header Done--");
         
         // Parse the records
         int numberOfRecords = header.getNumberOfRecords();
+        int numberOfFields = header.getFields().size();
         int curField = 0;
         records = new ArrayList<DBFRecord>(numberOfRecords);
         DBFField recordField = fields.get(curField++);
         DBFRecord record = new DBFRecord(recordField, bis);
         while(record.isValid()) {
             records.add(record);
-            if(curField >= numberOfRecords) {
+            if(curField == numberOfFields) {
                 curField = 0;
+                System.out.println("--Row done--");
             }
             recordField = fields.get(curField++);
             record = new DBFRecord(recordField, bis);
